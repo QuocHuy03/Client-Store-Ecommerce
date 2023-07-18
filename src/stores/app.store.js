@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 import { authSlice } from "./authSlide";
 import { loginThunk } from "../reduxThunk/authThunk";
+import cartSlide from "./cartSlide";
 
 const authPersistConfig = {
   key: "auth",
@@ -15,9 +16,20 @@ const persistedAuthReducer = persistReducer(
   authSlice.reducer
 );
 
+const cartPersistConfig = {
+  key: "cart",
+  storage: storage,
+};
+
+const persistedCartReducer = persistReducer(
+  cartPersistConfig,
+  cartSlide.reducer
+);
+
 export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
+    cart: persistedCartReducer,
   },
   middleware: [thunk],
 });

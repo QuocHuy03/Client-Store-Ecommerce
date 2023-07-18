@@ -4,9 +4,15 @@ import Layout from "../../components/libs/Layout";
 import { AppContext } from "../../context/AppContextProvider";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../utils/api/productsApi";
+import { useDispatch } from "react-redux";
 
 const HomePage = () => {
   const { isOpenModal, setIsOpenModal } = useContext(AppContext);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
+
   const openModal = () => {
     setIsOpenModal(true);
   };
@@ -19,11 +25,16 @@ const HomePage = () => {
     staleTime: 1000,
   });
 
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
   const handleImageClick = (index) => {
-    console.log(index);
     setSelectedImageIndex(index);
+  };
+  const handleColorClick = (color) => {
+    setSelectedColor(color);
+  };
+
+  const addProduct = (product) => {
+    console.log("Sản Phẩm : ", product);
+    dispatch(addToCart({ product, quantity }));
   };
 
   return (
@@ -149,7 +160,7 @@ const HomePage = () => {
                     </div>
                     <ModalProduct
                       isOpenModal={isOpenModal}
-                      title={"Modal Product"}
+                      title={"Detail Product"}
                       closeModal={closeModal}
                     >
                       <div className="relative flex w-full items-center overflow-hidden bg-white px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
@@ -311,57 +322,44 @@ const HomePage = () => {
                                 </div>
                               </div>
                               <hr className="my-4" />
-                              <div className="flex flex-col gap-y-6">
-                                <div className="flex items-center gap-x-4">
+                              <div className="flex flex-col gap-y-2">
+                                <div className="flex items-center gap-x-2">
                                   <h3 className="font-semibold"> Color: </h3>
-                                  <div className="h-6 w-6 rounded-full border border-gray-600" />
+                                  {item.nameColors &&
+                                    item.nameColors
+                                      .split(",")
+                                      .map((color, index) => (
+                                        <div
+                                          key={index}
+                                          className={`h-6 w-6 rounded-full border ${
+                                            selectedColor === color
+                                              ? "border-2 border-blue-700"
+                                              : ""
+                                          }`}
+                                          style={{
+                                            backgroundColor: color,
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            handleColorClick(color)
+                                          }
+                                        />
+                                      ))}
                                 </div>
                                 <div className="flex items-center gap-x-4">
-                                  <div className="text-base">
-                                    {item.contentProduct}
-                                  </div>
+                                  <div
+                                    className="text-base"
+                                    dangerouslySetInnerHTML={{
+                                      __html: item.contentProduct,
+                                    }}
+                                  />
                                 </div>
                               </div>
-                              <div className="flex flex-row items-center justify-between">
-                                <div className="flex flex-row items-center gap-4">
-                                  <div className="w-10 h-10 rounded-[1px] border-neutral-400 flex items-center justify-center text-neutral-600 cursor-pointer hover:opacity-80 transition ">
-                                    <svg
-                                      stroke="currentColor"
-                                      fill="currentColor"
-                                      strokeWidth={0}
-                                      viewBox="0 0 1024 1024"
-                                      height="1em"
-                                      width="1em"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path d="M872 474H152c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h720c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z" />
-                                    </svg>
-                                  </div>
-                                  <div className="font-light text-xl text-neutral-600">
-                                    1
-                                  </div>
-                                  <div className=" w-10 h-10 rounded-[1px] border-neutral-400 flex items-center justify-center text-neutral-600 cursor-pointer hover:opacity-80 transition ">
-                                    <svg
-                                      stroke="currentColor"
-                                      fill="currentColor"
-                                      strokeWidth={0}
-                                      t={1551322312294}
-                                      viewBox="0 0 1024 1024"
-                                      version="1.1"
-                                      height="1em"
-                                      width="1em"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <defs />
-                                      <path d="M474 152m8 0l60 0q8 0 8 8l0 704q0 8-8 8l-60 0q-8 0-8-8l0-704q0-8 8-8Z" />
-                                      <path d="M168 474m8 0l672 0q8 0 8 8l0 60q0 8-8 8l-672 0q-8 0-8-8l0-60q0-8 8-8Z" />
-                                    </svg>
-                                  </div>
-                                </div>
-                              </div>
+
                               <div className="mt-10 flex items-center gap-x-3">
                                 <button
                                   type="button"
+                                  onClick={() => addProduct(item)}
                                   className="w-auto rounded-full bg-black border border-transparent px-5 py-3 disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold hover:opacity-75 transition flex items-center gap-x-2"
                                 >
                                   Add to Cart
