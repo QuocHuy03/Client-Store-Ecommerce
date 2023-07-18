@@ -6,8 +6,7 @@ const http = new Http();
 export const fetchAllProducts = async () => {
   try {
     const state = store.getState();
-    const accessToken = state.auth.user.accessToken || state.auth.user.idToken;
-    console.log(accessToken);
+    const accessToken = state.auth.user.accessToken;
     http.setAccessToken(accessToken);
     const response = await http.get(`/getAllProducts`);
     return response;

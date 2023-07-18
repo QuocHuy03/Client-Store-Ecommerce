@@ -10,6 +10,7 @@ export const loginThunk = createAsyncThunk(
     try {
       const response = await postLogin(data);
       if (response.status === true) {
+        message.success(`${response.message}`);
         dispatch(loginSuccess(response));
         return response;
       } else {
