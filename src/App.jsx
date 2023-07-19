@@ -28,7 +28,7 @@ function App() {
           {user ? (
             <>
               <Route path="/" element={<HomePage />} />
-              <Route path="/detail" element={<DetailPage />} />
+              <Route path="/detail/:slug" element={<DetailPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/filter" element={<FilterPage />} />
               {/* <Route path="/categories" element={<ListCategory />} />

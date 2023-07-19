@@ -1,6 +1,70 @@
+import { useEffect, useState } from "react";
 import Layout from "../../components/libs/Layout";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProductBySlug } from "../../utils/api/productsApi";
 
 const DetailPage = () => {
+  const { slug } = useParams();
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [showColorError, setShowColorError] = useState(false);
+  const [isSlug, setIsSlug] = useState(slug || "");
+
+  useEffect(() => {
+    if (slug) {
+      setIsSlug(slug);
+    }
+  }, [slug]);
+
+  const { data: product, isLoading } = useQuery(
+    ["detail", isSlug],
+    () => fetchProductBySlug(isSlug),
+    {
+      staleTime: 500,
+    }
+  );
+
+  if (isLoading) {
+    return <p>Loading</p>;
+  }
+
+  const handleImageClick = (index) => {
+    setSelectedImageIndex(index);
+  };
+  const handleColorClick = (color) => {
+    if (color === null) {
+      setShowColorError(true);
+    } else {
+      setSelectedColor(color);
+      setShowColorError(false);
+    }
+  };
+
+  const addProduct = (product) => {
+    if (!selectedColor) {
+      setShowColorError(true);
+      return;
+    }
+
+    const { id, nameProduct, price_has_ropped, imagePaths, nameCategory } =
+      product;
+    dispatch(
+      addToCart({
+        product: {
+          id,
+          name: nameProduct,
+          color: selectedColor,
+          price: price_has_ropped,
+          image: imagePaths,
+          category: nameCategory,
+        },
+        quantity,
+      })
+    );
+    message.success(`Thêm Sản Phẩm Vào Giỏ Hàng Success`);
+    setIsOpenModal(false);
+  };
   return (
     <Layout>
       <div className="bg-white">
@@ -14,135 +78,90 @@ const DetailPage = () => {
                     role="tablist"
                     aria-orientation="horizontal"
                   >
-                    <button
-                      className="relative flex aspect-square cursor-pointer items-center justify-center rounded-md bg-white"
-                      id="headlessui-tabs-tab-:r14:"
-                      role="tab"
-                      type="button"
-                      aria-selected="true"
-                      tabIndex={0}
-                      data-headlessui-state="selected"
-                      aria-controls="headlessui-tabs-panel-:r17:"
-                    >
-                      <div>
-                        <span className="absolute h-full w-full aspect-square inset-0 overflow-hidden rounded-md">
-                          <img
-                            alt
-                            loading="lazy"
-                            decoding="async"
-                            data-nimg="fill"
-                            className="object-cover object-center"
-                            sizes="100vw"
-                            srcSet="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=750&q=75 750w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=828&q=75 828w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1080&q=75 1080w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1200&q=75 1200w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1920&q=75 1920w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=2048&q=75 2048w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=3840&q=75 3840w"
-                            src="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=3840&q=75"
-                            style={{
-                              position: "absolute",
-                              height: "100%",
-                              width: "100%",
-                              inset: 0,
-                              color: "transparent",
-                            }}
-                          />
-                        </span>
-                        <span className="absolute inset-0 rounded-md ring-2 ring-offset-2 ring-black" />
-                      </div>
-                    </button>
-                    <button
-                      className="relative flex aspect-square cursor-pointer items-center justify-center rounded-md bg-white"
-                      id="headlessui-tabs-tab-:r15:"
-                      role="tab"
-                      type="button"
-                      aria-selected="false"
-                      tabIndex={-1}
-                      data-headlessui-state
-                      aria-controls="headlessui-tabs-panel-:r18:"
-                    >
-                      <div>
-                        <span className="absolute h-full w-full aspect-square inset-0 overflow-hidden rounded-md">
-                          <img
-                            alt
-                            loading="lazy"
-                            decoding="async"
-                            data-nimg="fill"
-                            className="object-cover object-center"
-                            sizes="100vw"
-                            srcSet="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069744%2Fpdqapdkdgzsblj5akows.jpg&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069744%2Fpdqapdkdgzsblj5akows.jpg&w=750&q=75 750w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069744%2Fpdqapdkdgzsblj5akows.jpg&w=828&q=75 828w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069744%2Fpdqapdkdgzsblj5akows.jpg&w=1080&q=75 1080w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069744%2Fpdqapdkdgzsblj5akows.jpg&w=1200&q=75 1200w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069744%2Fpdqapdkdgzsblj5akows.jpg&w=1920&q=75 1920w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069744%2Fpdqapdkdgzsblj5akows.jpg&w=2048&q=75 2048w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069744%2Fpdqapdkdgzsblj5akows.jpg&w=3840&q=75 3840w"
-                            src="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069744%2Fpdqapdkdgzsblj5akows.jpg&w=3840&q=75"
-                            style={{
-                              position: "absolute",
-                              height: "100%",
-                              width: "100%",
-                              inset: 0,
-                              color: "transparent",
-                            }}
-                          />
-                        </span>
-                        <span className="absolute inset-0 rounded-md ring-2 ring-offset-2 ring-transparent" />
-                      </div>
-                    </button>
-                    <button
-                      className="relative flex aspect-square cursor-pointer items-center justify-center rounded-md bg-white"
-                      id="headlessui-tabs-tab-:r16:"
-                      role="tab"
-                      type="button"
-                      aria-selected="false"
-                      tabIndex={-1}
-                      data-headlessui-state
-                      aria-controls="headlessui-tabs-panel-:r19:"
-                    >
-                      <div>
-                        <span className="absolute h-full w-full aspect-square inset-0 overflow-hidden rounded-md">
-                          <img
-                            alt
-                            loading="lazy"
-                            decoding="async"
-                            data-nimg="fill"
-                            className="object-cover object-center"
-                            sizes="100vw"
-                            srcSet="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069740%2Fgxtjh5nya0vpc1co1ter.webp&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069740%2Fgxtjh5nya0vpc1co1ter.webp&w=750&q=75 750w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069740%2Fgxtjh5nya0vpc1co1ter.webp&w=828&q=75 828w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069740%2Fgxtjh5nya0vpc1co1ter.webp&w=1080&q=75 1080w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069740%2Fgxtjh5nya0vpc1co1ter.webp&w=1200&q=75 1200w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069740%2Fgxtjh5nya0vpc1co1ter.webp&w=1920&q=75 1920w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069740%2Fgxtjh5nya0vpc1co1ter.webp&w=2048&q=75 2048w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069740%2Fgxtjh5nya0vpc1co1ter.webp&w=3840&q=75 3840w"
-                            src="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069740%2Fgxtjh5nya0vpc1co1ter.webp&w=3840&q=75"
-                            style={{
-                              position: "absolute",
-                              height: "100%",
-                              width: "100%",
-                              inset: 0,
-                              color: "transparent",
-                            }}
-                          />
-                        </span>
-                        <span className="absolute inset-0 rounded-md ring-2 ring-offset-2 ring-transparent" />
-                      </div>
-                    </button>
+                    {product.imagePaths &&
+                      product.imagePaths.split(",").map((imagePath, index) => (
+                        <button
+                          key={index}
+                          className={`relative flex aspect-square cursor-pointer items-center justify-center rounded-md bg-white ${
+                            selectedImageIndex === index
+                              ? "border-2 border-black"
+                              : ""
+                          }`}
+                          onClick={() => handleImageClick(index)}
+                          id="headlessui-tabs-tab-:r14:"
+                          role="tab"
+                          type="button"
+                          aria-selected="true"
+                          tabIndex={0}
+                          data-headlessui-state="selected"
+                          aria-controls="headlessui-tabs-panel-:r17:"
+                        >
+                          <div>
+                            <span className="absolute h-full w-full aspect-square inset-0 overflow-hidden rounded-md">
+                              <img
+                                alt={product.nameProduct}
+                                loading="lazy"
+                                decoding="async"
+                                data-nimg="fill"
+                                className="object-cover object-center"
+                                sizes="100vw"
+                                srcSet={imagePath}
+                                style={{
+                                  position: "absolute",
+                                  height: "100%",
+                                  width: "100%",
+                                  inset: 0,
+                                  color: "transparent",
+                                }}
+                              />
+                            </span>
+                            <span
+                              className={`absolute inset-0 rounded-md ring-2 ${
+                                selectedImageIndex === index
+                                  ? "ring-offset-2 ring-black"
+                                  : "ring-transparent"
+                              }`}
+                            />
+                          </div>
+                        </button>
+                      ))}
                   </div>
                 </div>
                 <div className="aspect-square w-full">
-                  <div
-                    id="headlessui-tabs-panel-:r17:"
-                    role="tabpanel"
-                    tabIndex={0}
-                    data-headlessui-state="selected"
-                    aria-labelledby="headlessui-tabs-tab-:r14:"
-                  >
-                    <div className="aspect-square relative h-full w-full sm:rounded-lg overflow-hidden">
-                      <img
-                        alt
-                        loading="lazy"
-                        decoding="async"
-                        data-nimg="fill"
-                        className="object-cover object-center"
-                        sizes="100vw"
-                        srcSet="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=750&q=75 750w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=828&q=75 828w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1080&q=75 1080w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1200&q=75 1200w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1920&q=75 1920w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=2048&q=75 2048w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=3840&q=75 3840w"
-                        src="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=3840&q=75"
-                        style={{
-                          position: "absolute",
-                          height: "100%",
-                          width: "100%",
-                          inset: 0,
-                          color: "transparent",
-                        }}
-                      />
+                  {product.imagePaths && (
+                    <div
+                      id={`headlessui-tabs-panel-${selectedImageIndex}`}
+                      role="tabpanel"
+                      tabIndex={0}
+                      data-headlessui-state="selected"
+                      aria-labelledby={`headlessui-tabs-tab-${selectedImageIndex}`}
+                    >
+                      <div className="aspect-square relative h-full w-full sm:rounded-lg overflow-hidden">
+                        <img
+                          alt={product.nameProduct}
+                          loading="lazy"
+                          decoding="async"
+                          data-nimg="fill"
+                          className="object-cover object-center"
+                          sizes="100vw"
+                          srcSet={
+                            product.imagePaths
+                              ? product.imagePaths.split(",")[
+                                  selectedImageIndex
+                                ]
+                              : null
+                          }
+                          style={{
+                            position: "absolute",
+                            height: "100%",
+                            width: "100%",
+                            inset: 0,
+                            color: "transparent",
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <span
                     id="headlessui-tabs-panel-:r18:"
                     role="tabpanel"
@@ -185,91 +204,121 @@ const DetailPage = () => {
               </div>
               <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900">
-                    THOM BROWNE
-                  </h1>
-                  <p className="text-lg text-neutral-500">THOM BROWNE</p>
-                  <div className="mt-3 flex items-end justify-between">
-                    <p className="text-2xl text-gray-900" />
-                    <div className="font-semibold">10.000.000&nbsp;₫</div>
-                    <p />
+                  <div>
+                    <p className="font-semibold text-lg">
+                      {product.nameProduct}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className=" text-gray-500">{product.nameCategory}</p>
+                      <p className="text-xs font-semibold uppercase text-green-400">
+                        {product.statusProduct}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center gap-4">
+                    <div className="text-xl font-semibold text-blue-700">
+                      {product.initial_price.toLocaleString()}đ
+                    </div>
+                    <div
+                      className="text-lg"
+                      style={{
+                        textDecoration: "line-through",
+                      }}
+                    >
+                      {product.price_has_ropped.toLocaleString()}đ
+                    </div>
                   </div>
                   <hr className="my-4" />
+
                   <div className="flex flex-col gap-y-6">
-                    <div className="flex items-center gap-x-4">
-                      <h3 className="font-semibold"> Size: </h3>
-                      <div>Extra Small</div>
+                    <div className="flex items-center gap-x-2">
+                      <h3 className="font-semibold"> Color : </h3>
+                      {product.nameColors &&
+                        product.nameColors.split(",").map((color, index) => (
+                          <div
+                            key={index}
+                            className={`h-8 w-8 rounded-full border ${
+                              selectedColor === color
+                                ? "border-2 border-blue-700"
+                                : "border"
+                            }`}
+                            style={{
+                              backgroundColor: color,
+                              cursor: "pointer",
+                            }}
+                            onClick={() => handleColorClick(color)}
+                          />
+                        ))}
+                      {showColorError && (
+                        <span className="text-red-500">
+                          (Vui lòng chọn Color)
+                        </span>
+                      )}
                     </div>
-                    <div className="flex items-center gap-x-4">
-                      <h3 className="font-semibold"> Color: </h3>
-                      <div className="h-6 w-6 rounded-full border border-gray-600" />
-                    </div>
-                    <div className="flex items-center gap-x-4">
-                      <h3 className="font-semibold"> Description: </h3>
-                      <div className="text-lg">
-                        Sản phẩm rất tốt và rất đáng sử dụng :))
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-row items-center justify-between">
-                    <div className="flex flex-row items-center gap-4">
-                      <div className="w-10 h-10 rounded-[1px] border-neutral-400 flex items-center justify-center text-neutral-600 cursor-pointer hover:opacity-80 transition ">
-                        <svg
-                          stroke="currentColor"
-                          fill="currentColor"
-                          strokeWidth={0}
-                          viewBox="0 0 1024 1024"
-                          height="1em"
-                          width="1em"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M872 474H152c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h720c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z" />
-                        </svg>
-                      </div>
-                      <div className="font-light text-xl text-neutral-600">
-                        1
-                      </div>
-                      <div className=" w-10 h-10 rounded-[1px] border-neutral-400 flex items-center justify-center text-neutral-600 cursor-pointer hover:opacity-80 transition ">
-                        <svg
-                          stroke="currentColor"
-                          fill="currentColor"
-                          strokeWidth={0}
-                          t={1551322312294}
-                          viewBox="0 0 1024 1024"
-                          version="1.1"
-                          height="1em"
-                          width="1em"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <defs />
-                          <path d="M474 152m8 0l60 0q8 0 8 8l0 704q0 8-8 8l-60 0q-8 0-8-8l0-704q0-8 8-8Z" />
-                          <path d="M168 474m8 0l672 0q8 0 8 8l0 60q0 8-8 8l-672 0q-8 0-8-8l0-60q0-8 8-8Z" />
-                        </svg>
-                      </div>
+                    <div className="flex items-center gap-x-2">
+                      <div
+                        className="text-base"
+                        dangerouslySetInnerHTML={{
+                          __html: product.contentProduct,
+                        }}
+                      ></div>
                     </div>
                   </div>
+                  <hr class="my-4"></hr>
+
+                  <div>
+                    <h3 className="pb-2 text-base font-medium text-slate-500">
+                      KHUYẾN MÃI ĐÃ NHẬN
+                    </h3>
+                    <div className="flex gap-x-5 pb-2">
+                      <div>
+                        <img
+                          style={{
+                            width: 35,
+                            height: 25,
+                          }}
+                          height="25"
+                          width="25"
+                          src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
+                          alt=""
+                        />
+                      </div>
+                      <div>
+                        1x Miễn phí 1 đổi 1 Laptop trong 30 ngày (Áp dụng cho
+                        đơn hàng tháng sinh nhật 1/7 - 31/7/2023)
+                      </div>
+                    </div>
+                    <div className="flex gap-x-5">
+                      <div>
+                        <img
+                          style={{
+                            width: 27,
+                            height: 27,
+                          }}
+                          src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
+                          alt=""
+                        />
+                      </div>
+                      <div>1x Ba lô Lenovo (Quà tặng)</div>
+                    </div>
+                  </div>
+
+                  <hr className="my-4" />
+
                   <div className="mt-10 flex items-center gap-x-3">
                     <button
                       type="button"
-                      className="w-auto rounded-full bg-black border border-transparent px-5 py-3 disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold hover:opacity-75 transition flex items-center gap-x-2"
+                      style={{ flex: 1 }}
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     >
-                      Add to Cart
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={24}
-                        height={24}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="lucide lucide-shopping-cart"
-                      >
-                        <circle cx={8} cy={21} r={1} />
-                        <circle cx={19} cy={21} r={1} />
-                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
-                      </svg>
+                      Mua Ngay
+                    </button>
+                    <button
+                      type="button"
+                      style={{ flex: 1 }}
+                      className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                    >
+                      Thêm Vào Giỏ Hàng
                     </button>
                   </div>
                 </div>
