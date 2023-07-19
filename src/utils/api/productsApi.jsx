@@ -45,6 +45,19 @@ export const fetchProductBySlug = async (slug) => {
   }
 };
 
+export const fetchProductOfCategory = async (id) => {
+  try {
+    const state = store.getState();
+    const accessToken = state.auth.user.accessToken;
+    http.setAccessToken(accessToken);
+    const response = await http.get(`/getProductOfCategory/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
 export const fetchPostProduct = async (data) => {
   try {
     const state = store.getState();

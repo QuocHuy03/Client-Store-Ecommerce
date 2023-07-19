@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import Layout from "../../components/libs/Layout";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchProductBySlug } from "../../utils/api/productsApi";
+import {
+  fetchProductBySlug,
+  fetchProductOfCategory,
+} from "../../utils/api/productsApi";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../stores/cartSlice";
 import { message } from "antd";
@@ -22,15 +25,29 @@ const DetailPage = () => {
     }
   }, [slug]);
 
-  const { data: product, isLoading } = useQuery(
+  const { data: product, isLoading: loadingProduct } = useQuery(
     ["detail", isSlug],
     () => fetchProductBySlug(isSlug),
     {
       staleTime: 500,
+      enabled: !!isSlug,
     }
   );
 
-  if (isLoading) {
+  const { data: related, isLoading: loadingRelated } = useQuery(
+    ["detail", product?.categoryID],
+    () => fetchProductOfCategory(product?.categoryID),
+    {
+      staleTime: 500,
+      enabled: !!product?.categoryID,
+    }
+  );
+
+  const filteredProduct =
+    related?.filter((huydev) => huydev.slugProduct !== product.slugProduct) ??
+    [];
+
+  if (loadingProduct) {
     return <p>Loading</p>;
   }
 
@@ -268,7 +285,7 @@ const DetailPage = () => {
                       ></div>
                     </div>
                   </div>
-                  <hr class="my-4"></hr>
+                  <hr className="my-4"></hr>
 
                   <div>
                     <h3 className="pb-2 text-base font-medium text-slate-500">
@@ -329,79 +346,130 @@ const DetailPage = () => {
                 </div>
               </div>
             </div>
+            <div className="flex gap-2 mt-8 bg-white border rounded-lg shadow-none">
+              <div className="w-8/12 p-4">
+                <h3 className="text-xl font-bold ">Mô Tả Sản Phẩm</h3>
+                <div
+                  className="text-base pt-4"
+                  dangerouslySetInnerHTML={{
+                    __html: product.descriptionProduct,
+                  }}
+                ></div>
+              </div>
+
+              <div className="w-4/12 p-4">
+                <h3 className="text-xl font-bold ">Chính Sách Bán Hàng</h3>
+                <div className="text-base pt-2 ">
+                  <div className="flex items-center gap-2">
+                    <img
+                      width="25"
+                      height="25"
+                      src="https://lh3.googleusercontent.com/uvWBg1q90XtEWvHkWGDbDemjEaANJ_kX3NEfIywURPTMeaSZTORdttpehuFBNKpYiWQ3jHgito4ciCt9pEJIHH1V4IlPYoE=rw"
+                      alt=""
+                    />
+                    <span className="">
+                      Miễn phí giao hàng cho đơn hàng từ 5 triệu
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 pt-1">
+                    <img
+                      width="25"
+                      height="25"
+                      src="https://lh3.googleusercontent.com/LT3jrA76x0rGqq9TmqrwY09FgyZfy0sjMxbS4PLFwUekIrCA9GlLF6EkiFuKKL711tFBT7f2JaUgKT3--To8zOW4kHxPPHs4=rw"
+                      alt=""
+                    />
+                    <span className="">Cam kết hàng chính hãng 100% </span>
+                  </div>
+                  <div className="flex items-center gap-2 pt-1">
+                    <img
+                      width="25"
+                      height="25"
+                      src="https://lh3.googleusercontent.com/TECKlw8DFChVXu_FAYdNjbCuaDVhmOhbqsKLnayhIgx5Pvv0EX051qHWJR7vUgxiUXN5heAlx4bIDYsoES7X8pby5Pn9LXWN=rw"
+                      alt=""
+                    />
+                    <span className="">Đổi trả trong vòng 10 ngày </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <hr className="my-10" />
+
+            {/* Related Item */}
             <div className="space-y-4">
               <h3 className="font-bold text-3xl">Related Item</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <div className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4">
-                  <div className="aspect-square rounded-xl bg-gray-100 relative">
-                    <img
-                      alt="Image"
-                      loading="lazy"
-                      decoding="async"
-                      data-nimg="fill"
-                      className="aspect-square object-cover rounded-md"
-                      sizes="100vw"
-                      srcSet="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=750&q=75 750w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=828&q=75 828w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1080&q=75 1080w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1200&q=75 1200w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1920&q=75 1920w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=2048&q=75 2048w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=3840&q=75 3840w"
-                      src="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=3840&q=75"
-                      style={{
-                        position: "absolute",
-                        height: "100%",
-                        width: "100%",
-                        inset: 0,
-                        color: "transparent",
-                      }}
-                    />
-                    <div className="opacity-0 group-hover:opacity-100 transition w-full px-6 bottom-5 absolute">
-                      <div className="flex gap-x-6 justify-center">
-                        <button className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={20}
-                            height={20}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="text-gray-600"
-                          >
-                            <path d="m21 21-6-6m6 6v-4.8m0 4.8h-4.8" />
-                            <path d="M3 16.2V21m0 0h4.8M3 21l6-6" />
-                            <path d="M21 7.8V3m0 0h-4.8M21 3l-6 6" />
-                            <path d="M3 7.8V3m0 0h4.8M3 3l6 6" />
-                          </svg>
-                        </button>
-                        <button className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={20}
-                            height={20}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="text-gray-600"
-                          >
-                            <circle cx={8} cy={21} r={1} />
-                            <circle cx={19} cy={21} r={1} />
-                            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
-                          </svg>
-                        </button>
+                {filteredProduct?.map((item) => (
+                  <div className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4">
+                    <div className="aspect-square rounded-xl bg-gray-100 relative">
+                      <img
+                        alt="Image"
+                        loading="lazy"
+                        decoding="async"
+                        data-nimg="fill"
+                        className="aspect-square object-cover rounded-md"
+                        sizes="100vw"
+                        srcSet="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=750&q=75 750w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=828&q=75 828w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1080&q=75 1080w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1200&q=75 1200w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1920&q=75 1920w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=2048&q=75 2048w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=3840&q=75 3840w"
+                        src="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=3840&q=75"
+                        style={{
+                          position: "absolute",
+                          height: "100%",
+                          width: "100%",
+                          inset: 0,
+                          color: "transparent",
+                        }}
+                      />
+                      <div className="opacity-0 group-hover:opacity-100 transition w-full px-6 bottom-5 absolute">
+                        <div className="flex gap-x-6 justify-center">
+                          <button className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={20}
+                              height={20}
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="text-gray-600"
+                            >
+                              <path d="m21 21-6-6m6 6v-4.8m0 4.8h-4.8" />
+                              <path d="M3 16.2V21m0 0h4.8M3 21l6-6" />
+                              <path d="M21 7.8V3m0 0h-4.8M21 3l-6 6" />
+                              <path d="M3 7.8V3m0 0h4.8M3 3l6 6" />
+                            </svg>
+                          </button>
+                          <button className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={20}
+                              height={20}
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="text-gray-600"
+                            >
+                              <circle cx={8} cy={21} r={1} />
+                              <circle cx={19} cy={21} r={1} />
+                              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
                     </div>
+                    <div>
+                      <p className="font-semibold text-lg">THOM BROWNE</p>
+                      <p className="text-sm text-gray-500">THOM BROWNE</p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="font-semibold">10.000.000&nbsp;₫</div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-semibold text-lg">THOM BROWNE</p>
-                    <p className="text-sm text-gray-500">THOM BROWNE</p>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="font-semibold">10.000.000&nbsp;₫</div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
