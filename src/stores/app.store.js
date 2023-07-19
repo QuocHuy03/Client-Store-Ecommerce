@@ -1,40 +1,35 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { combineReducers } from "redux";
 import thunk from "redux-thunk";
-import { authSlice } from "./authSlide";
-import { loginThunk } from "../reduxThunk/authThunk";
-import cartSlide from "./cartSlide";
+import authSlice from "./authSlice";
+import cartSlice from "./cartSlice";
 
 const authPersistConfig = {
   key: "auth",
   storage: storage,
 };
 
-const persistedAuthReducer = persistReducer(
-  authPersistConfig,
-  authSlice.reducer
-);
+const persistedAuthReducer = persistReducer(authPersistConfig, authSlice);
 
 const cartPersistConfig = {
   key: "cart",
   storage: storage,
 };
 
-const persistedCartReducer = persistReducer(
-  cartPersistConfig,
-  cartSlide.reducer
-);
+const persistedCartReducer = persistReducer(cartPersistConfig, cartSlice);
 
-export const store = configureStore({
-  reducer: {
-    auth: persistedAuthReducer,
-    cart: persistedCartReducer,
-  },
-  middleware: [thunk],
+const rootReducer = combineReducers({
+  auth: persistedAuthReducer,
+  cart: persistedCartReducer,
 });
 
-store.dispatch(loginThunk);
+const middleware = [thunk];
+
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: middleware,
+});
 
 export const persistor = persistStore(store);
-export default store;

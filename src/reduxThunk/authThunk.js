@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { postLogin } from "../utils/api/authApi";
 // import { verifyToken } from "../../middlewares/verifyToken";
-import { loginError, loginSuccess } from "../stores/authSlide";
+import { loginError, loginSuccess } from "../stores/authSlice";
 import { message } from "antd";
 
 export const loginThunk = createAsyncThunk(

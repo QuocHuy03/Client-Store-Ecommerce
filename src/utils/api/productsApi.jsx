@@ -1,4 +1,4 @@
-import store from "../../stores/app.store";
+import {store} from "../../stores/app.store";
 import Http from "../http";
 
 const http = new Http();

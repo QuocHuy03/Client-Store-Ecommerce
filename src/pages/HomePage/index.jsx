@@ -5,6 +5,7 @@ import { AppContext } from "../../context/AppContextProvider";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../utils/api/productsApi";
 import { useDispatch } from "react-redux";
+import { addToCart } from "../../stores/cartSlice";
 
 const HomePage = () => {
   const { isOpenModal, setIsOpenModal } = useContext(AppContext);

@@ -8,8 +8,8 @@ import { BrowserRouter } from "react-router-dom";
 import { AppContextProvider } from "./context/AppContextProvider.jsx";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
-import { persistor, store } from "./stores/app.store.js";
 import Loading from "./components/Loading";
+import { persistor, store } from "./stores/app.store.js";
 
 const queryClient = new QueryClient();
 

@@ -3,7 +3,6 @@ import { Form, Input, Checkbox, Button, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { loginSuccess } from "../../stores/authSlide";
 import { GoogleLogin } from "@react-oauth/google";
 import "./style.css";
 import { clientID } from "../../env";
@@ -18,7 +17,6 @@ export default function LoginPage() {
   };
 
   const onFinish = (values) => {
-    console.log(values);
     dispatch(loginThunk(values));
   };
   return (
