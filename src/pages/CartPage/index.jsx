@@ -1,9 +1,12 @@
+import { useContext } from "react";
 import Layout from "../../components/libs/Layout";
+import { AppContext } from "../../context/AppContextProvider";
 
 const CartPage = () => {
+  const { carts } = useContext(AppContext);
+  console.log(carts.length);
   return (
     <Layout>
-      {" "}
       <div className="bg-white">
         <div className="mx-auto max-w-7xl">
           <div className="px-4 py-16 sm:px-6 lg:px-8">

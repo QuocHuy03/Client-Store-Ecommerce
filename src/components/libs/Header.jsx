@@ -1,4 +1,9 @@
+import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AppContext } from "../../context/AppContextProvider";
+
 const Header = () => {
+  const { carts } = useContext(AppContext);
   return (
     <div className="border-b">
       <div className="mx-auto max-w-7xl">
@@ -51,8 +56,8 @@ const Header = () => {
             </a>
           </nav>
           <div className="ml-auto flex items-center gap-x-4">
-            <button
-              type="button"
+            <Link
+              to={"/cart"}
               className="w-auto border border-transparent disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold hover:opacity-75 transition flex items-center rounded-full bg-black px-4 py-2"
             >
               <svg
@@ -71,8 +76,10 @@ const Header = () => {
                 <line x1={3} x2={21} y1={6} y2={6} />
                 <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
-              <span className="ml-2 text-sm font-medium text-white">1</span>
-            </button>
+              <span className="ml-2 text-sm font-medium text-white">
+                {carts.length}
+              </span>
+            </Link>
           </div>
         </div>
       </div>
