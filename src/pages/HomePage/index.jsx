@@ -393,30 +393,23 @@ const HomePage = () => {
                                   />
                                 </div>
                               </div>
+                              <hr className="my-4" />
 
-                              <div className="mt-10 flex items-center gap-x-3">
+                              <div className="mt-6 flex items-center gap-x-3">
+                                <button
+                                  type="button"
+                                  style={{ flex: 1 }}
+                                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                >
+                                  Mua Ngay
+                                </button>
                                 <button
                                   type="button"
                                   onClick={() => addProduct(item)}
-                                  className="w-auto rounded-full bg-black border border-transparent px-5 py-3 disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold hover:opacity-75 transition flex items-center gap-x-2"
+                                  style={{ flex: 1 }}
+                                  className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 >
-                                  Add to Cart
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width={24}
-                                    height={24}
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth={2}
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="lucide lucide-shopping-cart"
-                                  >
-                                    <circle cx={8} cy={21} r={1} />
-                                    <circle cx={19} cy={21} r={1} />
-                                    <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
-                                  </svg>
+                                  Thêm Vào Giỏ Hàng
                                 </button>
                               </div>
                             </div>

@@ -3,6 +3,9 @@ import Layout from "../../components/libs/Layout";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductBySlug } from "../../utils/api/productsApi";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../stores/cartSlice";
+import { message } from "antd";
 
 const DetailPage = () => {
   const { slug } = useParams();
@@ -10,6 +13,8 @@ const DetailPage = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [showColorError, setShowColorError] = useState(false);
   const [isSlug, setIsSlug] = useState(slug || "");
+  const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (slug) {
@@ -63,7 +68,6 @@ const DetailPage = () => {
       })
     );
     message.success(`Thêm Sản Phẩm Vào Giỏ Hàng Success`);
-    setIsOpenModal(false);
   };
   return (
     <Layout>
@@ -315,6 +319,7 @@ const DetailPage = () => {
                     </button>
                     <button
                       type="button"
+                      onClick={() => addProduct(product)}
                       style={{ flex: 1 }}
                       className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                     >
