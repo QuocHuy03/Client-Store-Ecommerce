@@ -6,11 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../utils/api/productsApi";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../stores/cartSlice";
+import { message } from "antd";
 
 const HomePage = () => {
   const { isOpenModal, setIsOpenModal } = useContext(AppContext);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [showColorError, setShowColorError] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
 
@@ -30,12 +32,37 @@ const HomePage = () => {
     setSelectedImageIndex(index);
   };
   const handleColorClick = (color) => {
-    setSelectedColor(color);
+    if (color === null) {
+      setShowColorError(true);
+    } else {
+      setSelectedColor(color);
+      setShowColorError(false);
+    }
   };
 
   const addProduct = (product) => {
-    console.log("Sản Phẩm : ", product);
-    dispatch(addToCart({ product, quantity }));
+    if (!selectedColor) {
+      setShowColorError(true);
+      return;
+    }
+
+    const { id, nameProduct, price_has_ropped, imagePaths, nameCategory } =
+      product;
+    dispatch(
+      addToCart({
+        product: {
+          id,
+          name: nameProduct,
+          color: selectedColor,
+          price: price_has_ropped,
+          image: imagePaths,
+          category: nameCategory,
+        },
+        quantity,
+      })
+    );
+    message.success(`Thêm Sản Phẩm Vào Giỏ Hàng Success`);
+    setIsOpenModal(false);
   };
 
   return (
@@ -326,6 +353,7 @@ const HomePage = () => {
                               <div className="flex flex-col gap-y-2">
                                 <div className="flex items-center gap-x-2">
                                   <h3 className="font-semibold"> Color: </h3>
+
                                   {item.nameColors &&
                                     item.nameColors
                                       .split(",")
@@ -335,7 +363,7 @@ const HomePage = () => {
                                           className={`h-6 w-6 rounded-full border ${
                                             selectedColor === color
                                               ? "border-2 border-blue-700"
-                                              : ""
+                                              : "border"
                                           }`}
                                           style={{
                                             backgroundColor: color,
@@ -346,6 +374,11 @@ const HomePage = () => {
                                           }
                                         />
                                       ))}
+                                  {showColorError && (
+                                    <span className="text-red-500">
+                                      (Vui lòng chọn Color)
+                                    </span>
+                                  )}
                                 </div>
                                 <div className="flex items-center gap-x-4">
                                   <div
