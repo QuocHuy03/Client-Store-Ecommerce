@@ -42,27 +42,35 @@ export default function CheckoutPage() {
     form.setFieldsValue(user);
   }, [form, user]);
 
+  const totalAmount = carts.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
   const onFinish = () => {
     message.success("Submit success!");
   };
 
+  const discoutCode = () => {
+    message.success("Áp Dụng Mã Giảm Giá Thành Công");
+  };
   return (
     <Layout>
       <div className="bg-white">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-7xl">
           <div className="px-4 py-16 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold text-black">Checkout</h1>
-            <div className="lg:grid lg:grid-cols-12 lg:items-start gap-x-12">
-              <div className="lg:col-span-7 border-r">
+            <div className="lg:grid lg:grid-cols-12 lg:items-start gap-x-2 pt-4">
+              <div className="lg:col-span-4 border-r pr-5">
                 <ul>
-                  <li className="flex py-6 border-b items-center">
+                  <li className="flex items-center">
                     <Form
                       form={form}
                       layout="vertical"
                       onFinish={onFinish}
                       autoComplete="off"
                     >
-                      <div className="py-4">
+                      <div className="p-2">
                         <h1 className="text-base font-bold text-black">
                           Thông Tin Người Nhận Hàng
                         </h1>
@@ -245,69 +253,138 @@ export default function CheckoutPage() {
                   </li>
                 </ul>
               </div>
-
-              <div className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-medium text-gray-900">
-                    Thông Tin Đơn Hàng
-                  </h2>
-                  <Link to={"/cart"} className="text-sm text-blue-500">
-                    Chỉnh sửa
-                  </Link>
+              <div className="lg:col-span-4 border-r pl-2">
+                <div className="py-2">
+                  <h1 className="text-base font-bold text-black">Phương Thức Thanh Toán</h1>
+                  <p className="text-sm pt-2">Thông tin thanh toán của bạn sẽ luôn được bảo mật</p>
                 </div>
-                <div className="space-y-4">
-                  {carts && carts.length > 0 ? (
-                    carts.map((item) => (
-                      <li
-                        className="flex py-2 border-b items-center"
-                        key={item.id}
-                      >
-                        <div className="relative h-20 w-20 rounded-md overflow-hidden sm:h-15 sm:w-15">
-                          <img
-                            alt={item.name}
-                            loading="lazy"
-                            decoding="async"
-                            data-nimg="fill"
-                            className="object-cover object-center"
-                            sizes="50vw"
-                            srcSet={
-                              item.image ? item.image.split(",")[0] : null
-                            }
-                            style={{
-                              position: "absolute",
-                              paddingTop: "10px",
-                              inset: 0,
-                              color: "transparent",
-                            }}
-                          />
-                        </div>
-                        <div className="relative flex flex-1 flex-col gap-4 sm:ml-6">
-                          <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6">
-                            <div className="flex justify-between">
-                              <p className="text-xs font-semibold text-black">
-                                {item.name}
-                              </p>
-                            </div>
-                            <div className="flex text-sm">
-                              <p className="text-gray-500 uppercase">
-                                {item.color}
-                              </p>
-                              <p className="text-gray-500 ml-2 border-l border-gray-200 pl-2">
-                                Small
-                              </p>
-                            </div>
-                            <div className="text-sm">
-                              {(item.quantity * item.price).toLocaleString()}đ
+
+
+              </div>
+              <div className="lg:col-span-4">
+                <div className="mt-16 rounded-lg bg-gray-50 px-2 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-medium text-gray-900">
+                      Thông Tin Đơn Hàng
+                    </h2>
+                    <Link to={"/cart"} className="text-sm text-blue-500">
+                      Chỉnh Sửa
+                    </Link>
+                  </div>
+                  <div className="space-y-4">
+                    {carts && carts.length > 0 ? (
+                      carts.map((item) => (
+                        <li
+                          className="flex py-2 border-b items-center justify-end"
+                          key={item.id}
+                        >
+                          <div className="relative h-20 w-20 rounded-md overflow-hidden sm:h-15 sm:w-15">
+                            <img
+                              alt={item.name}
+                              loading="lazy"
+                              decoding="async"
+                              data-nimg="fill"
+                              className="object-cover object-center"
+                              sizes="50vw"
+                              srcSet={
+                                item.image ? item.image.split(",")[0] : null
+                              }
+                              style={{
+                                position: "absolute",
+                                paddingTop: "10px",
+                                inset: 0,
+                                color: "transparent",
+                              }}
+                            />
+                          </div>
+                          <div className="relative flex flex-1 flex-col gap-4 sm:ml-6">
+                            <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6">
+                              <div className="flex justify-between">
+                                <p className="text-xs font-semibold text-black">
+                                  {item.name}
+                                </p>
+                              </div>
+                              <div className="flex text-sm">
+                                <p className="text-gray-500">
+                                  x {item.quantity}
+                                </p>
+                                <p className="text-gray-500 ml-2 uppercase border-l border-gray-200 pl-2">
+                                  {item.color}
+                                </p>
+                              </div>
+                              <div className="text-sm">
+                                {(item.quantity * item.price).toLocaleString()}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </li>
-                    ))
-                  ) : (
-                    <p className="text-center">
-                      <Empty />
-                    </p>
-                  )}
+                        </li>
+                      ))
+                    ) : (
+                      <p className="text-center">
+                        <Empty />
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="py-4 border-b text-center">
+                    <Form
+                      name="customized_form_controls"
+                      className="justify-around"
+                      layout="inline"
+                      onFinish={discoutCode}
+                    >
+                      <Form.Item
+                        name="discount_code"
+                        style={{ margin: 0 }}
+                        rules={[
+                          {
+                            required: true,
+                            message: "* Vui Lòng Nhập Mã Giảm Giá",
+                          },
+                        ]}
+                      >
+                        <Input size="large" placeholder="Nhập mã giảm giá" />
+                      </Form.Item>
+                      <Form.Item>
+                        <Button
+                          type="primary"
+                          size="large"
+                          className="bg-blue-500"
+                          htmlType="submit"
+                        >
+                          Áp Dụng
+                        </Button>
+                      </Form.Item>
+                    </Form>
+                  </div>
+
+                  <div className="py-4 border-b text-center">
+                    <div className="flex justify-between">
+                      <div className="text-base font-light text-slate-400">
+                        - Tạm Tính
+                      </div>
+                      <div className="text-base text-slate-500">
+                        {totalAmount.toLocaleString()}
+                      </div>
+                    </div>
+                    <div className="flex justify-between pt-2">
+                      <div className="text-base font-light text-slate-400">
+                        - Phí Vận Chuyển
+                      </div>
+                      <div className="text-base text-slate-500">40000</div>
+                    </div>
+                  </div>
+
+                  <div className="py-4 text-center">
+                    <div className="flex justify-between">
+                      <div className="text-lg text-slate-400 font-medium">
+                        Tổng Cộng
+                      </div>
+                      <div className="text-lg font-semibold text-blue-400">
+                        {`${(totalAmount - 40000).toLocaleString("vi-VN")}`}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
