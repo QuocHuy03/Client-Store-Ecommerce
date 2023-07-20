@@ -92,6 +92,8 @@ export default function CheckoutPage() {
 
     const orders = {
       values,
+      carts: carts,
+      totalPrice: totalAmount,
       userID: user.id,
       methodPayment: activeItem,
     };

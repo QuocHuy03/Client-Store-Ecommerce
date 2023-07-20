@@ -10,3 +10,12 @@ export const postOrder = async (data) => {
     console.error(error);
   }
 };
+
+export const vnpayAPI = async (amout) => {
+  try {
+    const response = await axios.post(`/apiVnpay`, { amout });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
