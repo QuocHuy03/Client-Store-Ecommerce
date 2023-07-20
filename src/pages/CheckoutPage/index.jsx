@@ -3,10 +3,10 @@ import { Button, Form, Input, message, Select, Space } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContextProvider";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import address from "../../json/addresses.json";
 
 export default function CheckoutPage() {
-  const { carts } = useContext(AppContext);
+  const { carts, user } = useContext(AppContext);
   const [form] = Form.useForm();
 
   const [provinces, setProvinces] = useState([]);
@@ -16,16 +16,9 @@ export default function CheckoutPage() {
   const [wards, setWards] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("https://lofi-style.mysapo.net/checkout/addresses.json")
-      .then((response) => {
-        setProvinces(response.data.provinces);
-        setDistricts(response.data.districts);
-        setWards(response.data.wards);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    setProvinces(address.provinces);
+    setDistricts(address.districts);
+    setWards(address.wards);
   }, []);
 
   const handleSelectProvince = (provinceId) => {
@@ -37,24 +30,20 @@ export default function CheckoutPage() {
     setSelectedDistrict(districtId);
   };
 
-  // Filter districts based on the selected province
   const filteredDistricts = districts.filter(
     (district) => district.province_id === selectedProvince
   );
 
-  // Filter wards based on the selected district
   const filteredWards = wards.filter(
     (ward) => ward.district_id === selectedDistrict
   );
 
+  useEffect(() => {
+    form.setFieldsValue(user);
+  }, [form, user]);
+
   const onFinish = () => {
     message.success("Submit success!");
-  };
-
-  const onFill = () => {
-    form.setFieldsValue({
-      url: "https://taobao.com/",
-    });
   };
 
   return (
@@ -79,19 +68,19 @@ export default function CheckoutPage() {
                         </h1>
                       </div>
                       <Form.Item
-                        name="email"
-                        label="Email"
+                        name="phone"
+                        label="Số Điện Thoại"
                         rules={[
                           {
                             required: true,
-                            message: "Email is required",
+                            message: "Phone is required",
                           },
                         ]}
                       >
                         <Input
                           size="large"
                           style={{ width: "100%" }}
-                          placeholder="Họ Và Tên"
+                          placeholder="Nhập số điện thoại"
                         />
                       </Form.Item>
 
@@ -162,9 +151,12 @@ export default function CheckoutPage() {
                           placeholder="Select Province"
                         >
                           {provinces.map((province) => (
-                            <Option key={province.id} value={province.id}>
+                            <Select.Option
+                              key={province.id}
+                              value={province.id}
+                            >
                               {province.name}
-                            </Option>
+                            </Select.Option>
                           ))}
                         </Select>
                       </Form.Item>
@@ -187,9 +179,12 @@ export default function CheckoutPage() {
                           disabled={!selectedProvince}
                         >
                           {filteredDistricts.map((district) => (
-                            <Option key={district.id} value={district.id}>
+                            <Select.Option
+                              key={district.id}
+                              value={district.id}
+                            >
                               {district.name}
-                            </Option>
+                            </Select.Option>
                           ))}
                         </Select>
                       </Form.Item>
@@ -210,16 +205,16 @@ export default function CheckoutPage() {
                           disabled={!selectedDistrict}
                         >
                           {filteredWards.map((ward) => (
-                            <Option key={ward.id} value={ward.id}>
+                            <Select.Option key={ward.id} value={ward.id}>
                               {ward.name}
-                            </Option>
+                            </Select.Option>
                           ))}
                         </Select>
                       </Form.Item>
 
                       <Form.Item
                         name="address"
-                        label="Địa chỉ cụ thể"
+                        label="Địa Chỉ Cụ Thể"
                         rules={[
                           {
                             required: true,
@@ -235,8 +230,9 @@ export default function CheckoutPage() {
                       </Form.Item>
 
                       <Form.Item>
-                        <Space>
+                        <Space className="pt-2 float-right">
                           <Button
+                            size="large"
                             type="primary"
                             className="bg-blue-500"
                             htmlType="submit"

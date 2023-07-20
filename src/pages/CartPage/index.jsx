@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
+  const { user } = useContext(AppContext);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { carts } = useContext(AppContext);
@@ -34,12 +35,16 @@ const CartPage = () => {
     dispatch(removeFromCart(item));
     message.error("Xóa Sản Phẩm Thành Công");
   };
-console.log(carts)
+
   const handleCheckOut = () => {
     if (carts.length === 0) {
       message.error("Giỏ Hàng Empty !");
     } else {
-      navigate(`/checkout/${uuidv4()}`);
+      if (user) {
+        navigate(`/checkout/${uuidv4()}`);
+      } else {
+        navigate("/login");
+      }
     }
   };
 

@@ -4,7 +4,7 @@ import { httpApi } from "../env";
 class Http {
   constructor() {
     this.huydev = axios.create({
-      baseURL: `${httpApi}/api`,
+      baseURL: `${httpApi}/api/web`,
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",

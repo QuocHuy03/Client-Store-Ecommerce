@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { postLogin } from "../utils/api/authApi";
-// import { verifyToken } from "../../middlewares/verifyToken";
+import { verifyToken } from "../middlewares/verifyToken";
 import { loginError, loginSuccess } from "../stores/authSlice";
 import { message } from "antd";
 
@@ -10,8 +10,9 @@ export const loginThunk = createAsyncThunk(
     try {
       const response = await postLogin(data);
       if (response.status === true) {
+        const user = await verifyToken(response.accessToken);
         message.success(`${response.message}`);
-        dispatch(loginSuccess(response));
+        dispatch(loginSuccess(user));
         return response;
       } else {
         dispatch(loginError(response));
