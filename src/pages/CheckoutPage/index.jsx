@@ -4,10 +4,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContextProvider";
 import { Link } from "react-router-dom";
 import address from "../../json/addresses.json";
+import { orderThunk } from "../../reduxThunk/orderThunk";
 import "./style.css";
+import { useDispatch } from "react-redux";
 
 export default function CheckoutPage() {
   const { carts, user } = useContext(AppContext);
+  const disabled = useDispatch();
   const [form] = Form.useForm();
 
   const [provinces, setProvinces] = useState([]);
@@ -87,7 +90,14 @@ export default function CheckoutPage() {
       values.commune = selectedCommune.name;
     }
 
-    console.log(values, activeItem);
+    const orders = {
+      values,
+      userID: user.id,
+      methodPayment: activeItem,
+    };
+
+    disabled(orderThunk(orders));
+
     message.success("Submit success!");
   };
 
