@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { clientID } from "./env";
+import CheckoutPage from "./pages/CheckoutPage";
 
 function App() {
   const { user } = useContext(AppContext);
@@ -31,6 +32,7 @@ function App() {
               <Route path="/detail/:slug" element={<DetailPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/filter" element={<FilterPage />} />
+              <Route path="/checkout/:uid" element={<CheckoutPage />} />
               {/* <Route path="/categories" element={<ListCategory />} />
           <Route path="/products" element={<ListProduct />} />
           <Route path="/product/add" element={<AddProduct />} />

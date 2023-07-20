@@ -34,10 +34,10 @@ const CartPage = () => {
     dispatch(removeFromCart(item));
     message.error("Xóa Sản Phẩm Thành Công");
   };
-
+console.log(carts)
   const handleCheckOut = () => {
-    if (carts < 0) {
-    message.error("Giỏ Hàng Empty !")
+    if (carts.length === 0) {
+      message.error("Giỏ Hàng Empty !");
     } else {
       navigate(`/checkout/${uuidv4()}`);
     }
@@ -119,23 +119,23 @@ const CartPage = () => {
                               {(item.quantity * item.price).toLocaleString()}đ
                             </div>
                           </div>
-                          <div class="flex items-center border-gray-100">
+                          <div className="flex items-center border-gray-100">
                             <button
                               onClick={() => handleDecreaseQuantity(item)}
-                              class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
+                              className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
                             >
                               {" "}
                               -{" "}
                             </button>
                             <input
-                              class="h-8 w-8 border bg-white text-center text-xs outline-none"
+                              className="h-8 w-8 border bg-white text-center text-xs outline-none"
                               value={item.quantity}
                               readOnly
                               min="1"
                             />
                             <button
                               onClick={() => handleIncreasingQuantity(item)}
-                              class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"
+                              className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"
                             >
                               {" "}
                               +{" "}
