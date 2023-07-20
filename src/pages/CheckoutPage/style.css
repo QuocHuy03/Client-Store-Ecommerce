@@ -1,0 +1,118 @@
+.payment_blue {
+  border-radius: 4px;
+  display: inline-block;
+  user-select: none;
+  border: 1px solid rgb(20, 53, 195);
+  background-color: rgb(255, 255, 255);
+  padding: 0.5rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  width: 100%;
+}
+.payment_unblue {
+  border-radius: 4px;
+  display: inline-block;
+  user-select: none;
+  border: 1px solid rgb(212, 214, 221);
+  background-color: rgb(255, 255, 255);
+  padding: 0.5rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  width: 100%;
+}
+.subtitle {
+  margin: 0px;
+  padding: 0px;
+  border-style: none;
+  border-width: 1px;
+  border-color: unset;
+  opacity: 1;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: unset;
+  font-size: 15px;
+  line-height: 24px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: unset;
+  max-width: unset;
+  min-width: unset;
+  transition: color 0.3s ease 0s;
+}
+
+.css-lji1jg {
+  opacity: 1;
+  display: inline-flex;
+  -webkit-box-align: center;
+  align-items: center;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  border: unset;
+  background-color: rgb(20, 53, 195);
+}
+
+.css-ngriz3 {
+  margin: 0.25rem 0px 0px;
+  padding: 0px;
+  border-style: none;
+  border-width: 1px;
+  border-color: unset;
+  opacity: 1;
+  color: rgb(130, 134, 158);
+  font-weight: 500;
+  text-decoration: unset;
+  font-size: 13px;
+  line-height: 20px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: unset;
+  max-width: unset;
+  min-width: unset;
+  transition: color 0.3s ease 0s;
+}
+
+.css-9o8e5m {
+  margin: 0px;
+  padding: 0px;
+  border-style: none;
+  border-width: 1px;
+  border-color: unset;
+  opacity: 1;
+  color: inherit;
+  font-weight: 500;
+  text-decoration: unset;
+  font-size: 13px;
+  line-height: 20px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: unset;
+  max-width: unset;
+  min-width: unset;
+  transition: color 0.3s ease 0s;
+}
+
+.css-18wywdr {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 0px 36px 36px 0px;
+  border-color: transparent rgb(20, 53, 195) transparent transparent;
+}
+
+.css-mpv07g {
+  display: flex;
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  z-index: 0;
+}

@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContextProvider";
 import { Link } from "react-router-dom";
 import address from "../../json/addresses.json";
+import "./style.css";
 
 export default function CheckoutPage() {
   const { carts, user } = useContext(AppContext);
@@ -14,6 +15,25 @@ export default function CheckoutPage() {
   const [districts, setDistricts] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [wards, setWards] = useState([]);
+  const [activeItem, setActiveItem] = useState(null);
+
+  const payments = [
+    {
+      id: 1,
+      name: "Thanh toán VNPAY-QR",
+      desc: "Thanh toán qua Internet Banking, Visa, Master, JCB, VNPAY-QR",
+      blade: true,
+    },
+    {
+      id: 2,
+      name: "Thanh toán khi nhận hàng",
+      desc: "",
+    },
+  ];
+
+  const handleClickPayment = (itemId) => {
+    setActiveItem(itemId);
+  };
 
   useEffect(() => {
     setProvinces(address.provinces);
@@ -253,13 +273,83 @@ export default function CheckoutPage() {
                   </li>
                 </ul>
               </div>
-              <div className="lg:col-span-4 border-r pl-2">
+              <div className="lg:col-span-4 border-r pl-2 pr-4">
                 <div className="py-2">
-                  <h1 className="text-base font-bold text-black">Phương Thức Thanh Toán</h1>
-                  <p className="text-sm pt-2">Thông tin thanh toán của bạn sẽ luôn được bảo mật</p>
+                  <h1 className="text-base font-bold text-black">
+                    Phương Thức Thanh Toán
+                  </h1>
+                  <p className="text-sm pt-2">
+                    Thông tin thanh toán của bạn sẽ luôn được bảo mật
+                  </p>
                 </div>
 
+                {payments.map((huyit) => (
+                  <div
+                    key={huyit.id}
+                    className={`item ${
+                      activeItem === huyit.id
+                        ? "payment_blue"
+                        : "payment_unblue"
+                    }`}
+                    onClick={() => handleClickPayment(huyit.id)}
+                  >
+                    <div className="subtitle">
+                      {huyit.name}
+                      {huyit.blade && (
+                        <span className="pl-2">
+                          <span className="css-lji1jg">
+                            <div
+                              type="caption"
+                              color="white"
+                              className="text-white text-xs"
+                            >
+                              Khuyên Dùng
+                            </div>
+                          </span>
+                        </span>
+                      )}
+                    </div>
 
+                    <div
+                      type="body"
+                      color="textSecondary"
+                      className="css-ngriz3"
+                    >
+                      {huyit.desc}
+                    </div>
+                    <div type="body" className="css-9o8e5m"></div>
+                    {/* chọn thì nó sẽ hiện này lên */}
+                    {activeItem === huyit.id ? (
+                      <>
+                        <div className="css-18wywdr"></div>
+                        <span className="css-mpv07g text-white">
+                          <svg
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            size={20}
+                            className="css-1kpmq"
+                            color="#ffffff"
+                            height={20}
+                            width={20}
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M5 12.4545L9.375 17L19 7"
+                              stroke="#82869E"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </span>
+                      </>
+                    ) : (
+                      ""
+                    )}
+
+                    {/* end */}
+                  </div>
+                ))}
               </div>
               <div className="lg:col-span-4">
                 <div className="mt-16 rounded-lg bg-gray-50 px-2 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-4">
