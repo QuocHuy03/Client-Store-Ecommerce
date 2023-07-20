@@ -9,10 +9,11 @@ import {
   increasingQuantity,
   removeFromCart,
 } from "../../stores/cartSlice";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { carts } = useContext(AppContext);
   const totalAmount = carts.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -32,6 +33,14 @@ const CartPage = () => {
   const handleDeleteItem = (item) => {
     dispatch(removeFromCart(item));
     message.error("Xóa Sản Phẩm Thành Công");
+  };
+
+  const handleCheckOut = () => {
+    if (carts < 0) {
+    message.error("Giỏ Hàng Empty !")
+    } else {
+      navigate(`/checkout/${uuidv4()}`);
+    }
   };
 
   return (
@@ -156,13 +165,13 @@ const CartPage = () => {
                     </div>
                   </div>
                 </div>
-                <Link
-                  to={`/checkout/${uuidv4()}`}
-                  type="button"
-                  className="rounded-full bg-black border border-transparent px-5 py-3 disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold hover:opacity-75 transition w-full mt-6"
+                <br />
+                <button
+                  onClick={handleCheckOut}
+                  className="rounded-full bg-black border border-transparent px-5 py-3 disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold hover:opacity-75 transition w-full float-right"
                 >
                   Thanh Toán
-                </Link>
+                </button>
               </div>
             </div>
           </div>
