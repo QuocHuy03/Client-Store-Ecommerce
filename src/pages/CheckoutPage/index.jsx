@@ -15,7 +15,7 @@ export default function CheckoutPage() {
   const [districts, setDistricts] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [wards, setWards] = useState([]);
-  const [activeItem, setActiveItem] = useState(null);
+  const [activeItem, setActiveItem] = useState(1);
 
   const payments = [
     {
@@ -318,7 +318,6 @@ export default function CheckoutPage() {
                       {huyit.desc}
                     </div>
                     <div type="body" className="css-9o8e5m"></div>
-                    {/* chọn thì nó sẽ hiện này lên */}
                     {activeItem === huyit.id ? (
                       <>
                         <div className="css-18wywdr"></div>
@@ -346,8 +345,6 @@ export default function CheckoutPage() {
                     ) : (
                       ""
                     )}
-
-                    {/* end */}
                   </div>
                 ))}
               </div>
