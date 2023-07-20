@@ -3,11 +3,13 @@ import Layout from "../../components/libs/Layout";
 import { AppContext } from "../../context/AppContextProvider";
 import { useDispatch } from "react-redux";
 import { Empty, message } from "antd";
+import { v4 as uuidv4 } from "uuid";
 import {
   decreaseQuantity,
   increasingQuantity,
   removeFromCart,
 } from "../../stores/cartSlice";
+import { Link } from "react-router-dom";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -154,12 +156,13 @@ const CartPage = () => {
                     </div>
                   </div>
                 </div>
-                <button
+                <Link
+                  to={`/checkout/${uuidv4()}`}
                   type="button"
                   className="rounded-full bg-black border border-transparent px-5 py-3 disabled:cursor-not-allowed disabled:opacity-50 text-white font-semibold hover:opacity-75 transition w-full mt-6"
                 >
                   Thanh Toán
-                </button>
+                </Link>
               </div>
             </div>
           </div>
