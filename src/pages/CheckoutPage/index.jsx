@@ -67,7 +67,27 @@ export default function CheckoutPage() {
     0
   );
 
-  const onFinish = () => {
+  const onFinish = (values) => {
+    const selectedCity = provinces.find(
+      (province) => province.id === values.city
+    );
+    if (selectedCity) {
+      values.city = selectedCity.name;
+    }
+
+    const selectedDistrict = districts.find(
+      (district) => district.id === values.district
+    );
+    if (selectedDistrict) {
+      values.district = selectedDistrict.name;
+    }
+
+    const selectedCommune = wards.find((ward) => ward.id === values.commune);
+    if (selectedCommune) {
+      values.commune = selectedCommune.name;
+    }
+
+    console.log(values, activeItem);
     message.success("Submit success!");
   };
 
