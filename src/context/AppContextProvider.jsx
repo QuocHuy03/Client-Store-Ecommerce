@@ -8,6 +8,7 @@ export function AppContextProvider({ children }) {
   const { user } = useSelector((state) => state.auth);
   const { carts } = useSelector((state) => state.cart);
 
+
   return (
     <AppContext.Provider
       value={{

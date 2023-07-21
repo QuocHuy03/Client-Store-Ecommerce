@@ -10,6 +10,7 @@ import RegisterPage from "./pages/RegisterPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { clientID } from "./env";
 import CheckoutPage from "./pages/CheckoutPage";
+import OrderPage from "./pages/OrderPage";
 
 function App() {
   return (
@@ -23,13 +24,9 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/filter" element={<FilterPage />} />
           <Route path="/checkout/:uid" element={<CheckoutPage />} />
-          {/* <Route path="/categories" element={<ListCategory />} />
-          <Route path="/products" element={<ListProduct />} />
-          <Route path="/product/add" element={<AddProduct />} />
-          <Route path="/product/edit/:slug" element={<EditProduct />} />
-          <Route path="/orders" element={<ListOrder />} />
-          <Route path="/users" element={<ListUser />} />
-          <Route path="*" element={<NotFound />} /> */}
+          <Route path="/order/success" element={<OrderPage />} />
+
+          {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
       </GoogleOAuthProvider>
     </>

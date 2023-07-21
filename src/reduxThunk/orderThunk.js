@@ -1,31 +1,45 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { postOrder, vnpayAPI } from "../utils/api/orderApi";
-import { verifyToken } from "../middlewares/verifyToken";
-import { loginError, loginSuccess } from "../stores/authSlice";
+import { vnpayAPI } from "../utils/api/paymentApi";
 import { message } from "antd";
+import { orderSuccess } from "../utils/api/orderApi";
+import { updateInfo } from "../utils/api/userApi";
+import { loginSuccess } from "../stores/authSlice";
 
 export const orderThunk = createAsyncThunk(
   "orders",
   async (data, { dispatch }) => {
     try {
+      const updateInfos = await updateInfo(data);
+      if (updateInfos) {
+        dispatch(loginSuccess(updateInfos));
+      }
+
       if (data.methodPayment === 1) {
         const vnPay = await vnpayAPI(data.totalPrice);
-        console.log(vnPay)
+        if (vnPay && vnPay.vnpUrl) {
+          return vnPay.vnpUrl;
+        } else {
+          throw new Error("VNPAY URL is missing or invalid.");
+        }
+      } else if (data.methodPayment === 2) {
+        const receive = `/order/success?paymentMethod=receive`;
+        return receive;
       } else {
-        
-      }
-      const response = await postOrder(data);
-      if (response.status === true) {
-        message.success(`${response.message}`);
-        // dispatch(loginSuccess(user));
-        return response;
-      } else {
-        // dispatch(loginError(response));
-        message.error(`${response.message}`);
-        throw new Error(response.message);
+        message.error("Vui lòng chọn phương thức thanh toán nhé");
       }
     } catch (error) {
-      //   dispatch(loginError(error));
+      throw new Error(error);
+    }
+  }
+);
+
+export const orderSuccessThunk = createAsyncThunk(
+  "order/success",
+  async (data, { dispatch }) => {
+    try {
+      const order = await orderSuccess(data);
+      console.log(order);
+    } catch (error) {
       throw new Error(error);
     }
   }

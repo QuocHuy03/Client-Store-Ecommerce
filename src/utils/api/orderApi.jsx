@@ -11,10 +11,10 @@ export const postOrder = async (data) => {
   }
 };
 
-export const vnpayAPI = async (amout) => {
+export const orderSuccess = async (data) => {
   try {
-    const response = await axios.post(`/apiVnpay`, { amout });
-    return response.data;
+    const response = await http.post(`/orderSuccess`, { data });
+    return response;
   } catch (error) {
     throw error;
   }

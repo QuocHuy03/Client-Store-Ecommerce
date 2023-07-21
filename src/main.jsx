@@ -14,7 +14,7 @@ import { persistor, store } from "./stores/app.store.js";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
@@ -30,5 +30,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

@@ -7,10 +7,11 @@ import address from "../../json/addresses.json";
 import { orderThunk } from "../../reduxThunk/orderThunk";
 import "./style.css";
 import { useDispatch } from "react-redux";
+import { transport_fee } from "../../env";
 
 export default function CheckoutPage() {
   const { carts, user } = useContext(AppContext);
-  const disabled = useDispatch();
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
   const [provinces, setProvinces] = useState([]);
@@ -70,7 +71,7 @@ export default function CheckoutPage() {
     0
   );
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     const selectedCity = provinces.find(
       (province) => province.id === values.city
     );
@@ -93,14 +94,17 @@ export default function CheckoutPage() {
     const orders = {
       values,
       carts: carts,
-      totalPrice: totalAmount,
+      totalPrice: totalAmount - transport_fee,
       userID: user.id,
       methodPayment: activeItem,
     };
 
-    disabled(orderThunk(orders));
-
-    message.success("Submit success!");
+    const paymentUrl = await dispatch(orderThunk(orders));
+    if (paymentUrl) {
+      window.location.href = paymentUrl.payload;
+    } else {
+      // Handle other scenarios or errors
+    }
   };
 
   const discoutCode = () => {
@@ -500,7 +504,7 @@ export default function CheckoutPage() {
                         Tổng Cộng
                       </div>
                       <div className="text-lg font-semibold text-blue-400">
-                        {`${(totalAmount - 40000).toLocaleString("vi-VN")}`}
+                        {`${(totalAmount - transport_fee).toLocaleString("vi-VN")}`}
                       </div>
                     </div>
                   </div>
