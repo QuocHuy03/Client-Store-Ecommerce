@@ -8,7 +8,10 @@ import { orderThunk } from "../../reduxThunk/orderThunk";
 import "./style.css";
 import { useDispatch } from "react-redux";
 import { discount_code, transport_fee } from "../../env";
-import { getDiscountThunk } from "../../reduxThunk/discountThunk";
+import {
+  applyDiscountThunk,
+  getDiscountThunk,
+} from "../../reduxThunk/discountThunk";
 
 export default function CheckoutPage() {
   const { carts, user } = useContext(AppContext);
@@ -96,26 +99,33 @@ export default function CheckoutPage() {
     setDiscountCode(e.target.value);
   };
 
-  const discoutCode = () => {
+  const discoutCode = async () => {
     if (discountCode === discount_code.code) {
       message.success("Áp Dụng Mã Giảm Giá Thành Công");
-      const discountedAmount =
-        totalAmount - transport_fee - discount_code.price;
-      setTotalPriceCode(discountedAmount);
+      // const discountedAmount =
+      //   totalAmount - transport_fee - discount_code.price;
+      // setTotalPriceCode(discountedAmount);
+
+      const dispatchApply = {
+        name: discount_code.code,
+        userID: user.id,
+        totalPrice: discount_code.price,
+      };
+
+      const postApplyDiscount = await dispatch(
+        applyDiscountThunk(dispatchApply)
+      );
+      console.log(postApplyDiscount.payload);
+
       formRef.current.resetFields();
       setIsDiscountApplied(true);
-      setAppliedDiscounts([...appliedDiscounts, discountCode]);
-
-      localStorage.setItem(
-        "appliedDiscounts",
-        JSON.stringify([...appliedDiscounts, discountCode])
-      );
     } else {
       message.error("Mã Giảm Giá Không Chính Xác !");
       setTotalPriceCode(totalAmount - transport_fee);
       formRef.current.resetFields();
     }
   };
+  console.log(appliedDiscounts)
 
   const handleDiscountCodeDelete = (code) => {
     const updatedDiscounts = appliedDiscounts.filter((item) => item !== code);
@@ -541,15 +551,15 @@ export default function CheckoutPage() {
 
                   {appliedDiscounts.map((code) => (
                     <div
-                      key={code}
+                      key={code.id}
                       className="flex py-4 border-b justify-between items-center"
                     >
                       <div className="mr-2">
-                        Mã giảm giá đã được áp dụng: {code}
+                        Mã giảm giá đã được áp dụng: {code.name}
                       </div>
                       <button
                         className="ml-2 text-red-500"
-                        onClick={() => handleDiscountCodeDelete(code)}
+                        onClick={() => handleDiscountCodeDelete(code.id)}
                       >
                         Xóa
                       </button>
