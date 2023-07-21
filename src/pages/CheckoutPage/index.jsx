@@ -8,6 +8,7 @@ import { orderThunk } from "../../reduxThunk/orderThunk";
 import "./style.css";
 import { useDispatch } from "react-redux";
 import { discount_code, transport_fee } from "../../env";
+import { getDiscountThunk } from "../../reduxThunk/discountThunk";
 
 export default function CheckoutPage() {
   const { carts, user } = useContext(AppContext);
@@ -72,27 +73,28 @@ export default function CheckoutPage() {
   }, [form, user]);
 
   useEffect(() => {
-    // Retrieve the stored discount codes from local storage on mount
-    const storedDiscounts = JSON.parse(
-      localStorage.getItem("appliedDiscounts") || "[]"
-    );
-    setAppliedDiscounts(storedDiscounts);
-  }, []);
+    const fetchDiscounts = async () => {
+      try {
+        const storedDiscounts = await dispatch(getDiscountThunk());
+        setAppliedDiscounts(storedDiscounts.payload);
+      } catch (error) {
+        console.error("Error fetching discounts:", error);
+      }
+    };
+
+    fetchDiscounts();
+  }, [dispatch]);
 
   const totalAmount = carts.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
-  const [totalPriceCode, setTotalPriceCode] = useState(
-    totalAmount - transport_fee
-  );
+  const [totalPriceCode, setTotalPriceCode] = useState();
 
   const handleDiscountCodeBlur = (e) => {
     setDiscountCode(e.target.value);
   };
-
-  console.log(totalPriceCode);
 
   const discoutCode = () => {
     if (discountCode === discount_code.code) {
@@ -153,12 +155,12 @@ export default function CheckoutPage() {
     };
     console.log(orders);
 
-    // const paymentUrl = await dispatch(orderThunk(orders));
-    // if (paymentUrl) {
-    //   window.location.href = paymentUrl.payload;
-    // } else {
-    //   // Handle other scenarios or errors
-    // }
+    const paymentUrl = await dispatch(orderThunk(orders));
+    if (paymentUrl) {
+      window.location.href = paymentUrl.payload;
+    } else {
+      // Handle other scenarios or errors
+    }
   };
 
   return (
