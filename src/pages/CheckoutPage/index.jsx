@@ -160,11 +160,12 @@ export default function CheckoutPage() {
       userID: user.id,
       methodPayment: activeItem,
     };
-    // console.log(orders);
+    console.log(orders);
 
     const paymentUrl = await dispatch(orderThunk(orders));
     if (paymentUrl) {
-      window.location.href = paymentUrl.payload;
+      console.log(paymentUrl);
+      // window.location.href = paymentUrl.payload;
     } else {
       // Handle other scenarios or errors
     }
