@@ -7,7 +7,7 @@ import address from "../../json/addresses.json";
 import { orderThunk } from "../../reduxThunk/orderThunk";
 import "./style.css";
 import { useDispatch } from "react-redux";
-import { transport_fee } from "../../env";
+import { discount_code, transport_fee } from "../../env";
 
 export default function CheckoutPage() {
   const { carts, user } = useContext(AppContext);
@@ -107,8 +107,12 @@ export default function CheckoutPage() {
     }
   };
 
-  const discoutCode = () => {
-    message.success("Áp Dụng Mã Giảm Giá Thành Công");
+  const discoutCode = (data) => {
+    if (data.discount_code === discount_code) {
+      message.success("Áp Dụng Mã Giảm Giá Thành Công");
+    } else {
+      message.error("Mã Giảm Giá Không Chính Xác !");
+    }
   };
   return (
     <Layout>
