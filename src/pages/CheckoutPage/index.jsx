@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { discount_code, transport_fee } from "../../env";
 import {
   applyDiscountThunk,
+  deleteDiscountThunk,
   getDiscountThunk,
 } from "../../reduxThunk/discountThunk";
 
@@ -93,7 +94,9 @@ export default function CheckoutPage() {
     0
   );
 
-  const [totalPriceCode, setTotalPriceCode] = useState();
+  const [totalPriceCode, setTotalPriceCode] = useState(
+    totalAmount - transport_fee
+  );
 
   const handleDiscountCodeBlur = (e) => {
     setDiscountCode(e.target.value);
@@ -113,8 +116,7 @@ export default function CheckoutPage() {
 
       if (postApplyDiscount.payload.status === true) {
         message.error(postApplyDiscount.payload.message);
-        const discountedAmount =
-          totalAmount - transport_fee - discount_code.price;
+        const discountedAmount = totalAmount - transport_fee - discounts.price;
         setTotalPriceCode(discountedAmount);
       } else {
         message.error(postApplyDiscount.payload.message);
@@ -129,12 +131,13 @@ export default function CheckoutPage() {
     }
   };
 
-  const handleDiscountCodeDelete = (code) => {
-    const updatedDiscounts = appliedDiscounts.filter((item) => item !== code);
-    setAppliedDiscounts(updatedDiscounts);
-
-    localStorage.setItem("appliedDiscounts", JSON.stringify(updatedDiscounts));
-
+  const handleDiscountCodeDelete = async (code) => {
+    const postDeleteDiscount = await dispatch(deleteDiscountThunk(code));
+    if (postDeleteDiscount.payload.status === true) {
+      message.error(postDeleteDiscount.payload.message);
+    } else {
+      message.error(postDeleteDiscount.payload.message);
+    }
     setTotalPriceCode(totalAmount - transport_fee);
     formRef.current.resetFields();
   };
@@ -167,12 +170,12 @@ export default function CheckoutPage() {
     };
     console.log(orders);
 
-    const paymentUrl = await dispatch(orderThunk(orders));
-    if (paymentUrl) {
-      window.location.href = paymentUrl.payload;
-    } else {
-      // Handle other scenarios or errors
-    }
+    // const paymentUrl = await dispatch(orderThunk(orders));
+    // if (paymentUrl) {
+    //   window.location.href = paymentUrl.payload;
+    // } else {
+    //   // Handle other scenarios or errors
+    // }
   };
 
   return (
