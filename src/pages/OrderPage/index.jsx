@@ -1,13 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import Layout from "../../components/libs/Layout";
 import { AppContext } from "../../context/AppContextProvider";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { orderSuccessThunk } from "../../reduxThunk/orderThunk";
+import { v4 as uuidv4 } from "uuid";
 import { transport_fee } from "../../env";
+import { message } from "antd";
 
 export default function OrderPage() {
   const { carts, user } = useContext(AppContext);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const location = useLocation();
@@ -20,7 +23,6 @@ export default function OrderPage() {
     vnp_CardType: queryParams.get("vnp_CardType"),
     vnp_OrderInfo: queryParams.get("vnp_OrderInfo"),
     vnp_TransactionNo: queryParams.get("vnp_TransactionNo"),
-    vnp_TransactionStatus: queryParams.get("vnp_TransactionStatus"),
   });
 
   const totalAmount = carts.reduce(
@@ -38,7 +40,14 @@ export default function OrderPage() {
           paymentVnpay,
           methodPayment: paymentHuyNe,
         };
-        await dispatch(orderSuccessThunk(orders));
+        const res = await dispatch(orderSuccessThunk(orders));
+        if (res.payload.status === true) {
+          message.success(res.payload.message);
+          navigate("/list-order");
+        } else {
+          message.error(res.payload);
+          navigate(`/checkout/${uuidv4()}`);
+        }
       } else if (paymentHuyNe === "receive") {
         const orders = {
           carts: carts,
@@ -46,7 +55,14 @@ export default function OrderPage() {
           userID: user.id,
           methodPayment: paymentHuyNe,
         };
-        await dispatch(orderSuccessThunk(orders));
+        const res = await dispatch(orderSuccessThunk(orders));
+        if (res.payload.status === true) {
+          message.success(res.payload.message);
+          navigate("/list-order");
+        } else {
+          message.error(res.payload);
+          navigate(`/checkout/${uuidv4()}`);
+        }
       } else {
         console.log("Huy Nè!");
       }
@@ -61,7 +77,7 @@ export default function OrderPage() {
 
   return (
     <Layout>
-      <h1>Đơn hàng đang xử lý...</h1>
+      <h1 className="text-3xl text-center p-10">Đơn hàng đang xử lý...</h1>
     </Layout>
   );
 }

@@ -11,6 +11,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { clientID } from "./env";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderPage from "./pages/OrderPage";
+import ListOrderPage from "./pages/ListOrderPage";
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/filter" element={<FilterPage />} />
           <Route path="/checkout/:uid" element={<CheckoutPage />} />
-          <Route path="/order/success" element={<OrderPage />} />
+          <Route path="/order" element={<OrderPage />} />
+          <Route path="/list-order" element={<ListOrderPage />} />
 
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>

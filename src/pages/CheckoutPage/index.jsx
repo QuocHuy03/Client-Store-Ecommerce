@@ -504,7 +504,9 @@ export default function CheckoutPage() {
                         Tổng Cộng
                       </div>
                       <div className="text-lg font-semibold text-blue-400">
-                        {`${(totalAmount - transport_fee).toLocaleString("vi-VN")}`}
+                        {`${(totalAmount - transport_fee).toLocaleString(
+                          "vi-VN"
+                        )}`}
                       </div>
                     </div>
                   </div>

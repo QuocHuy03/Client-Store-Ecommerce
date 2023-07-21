@@ -6,7 +6,7 @@ import { updateInfo } from "../utils/api/userApi";
 import { loginSuccess } from "../stores/authSlice";
 
 export const orderThunk = createAsyncThunk(
-  "orders",
+  "checkout",
   async (data, { dispatch }) => {
     try {
       const updateInfos = await updateInfo(data);
@@ -22,7 +22,7 @@ export const orderThunk = createAsyncThunk(
           throw new Error("VNPAY URL is missing or invalid.");
         }
       } else if (data.methodPayment === 2) {
-        const receive = `/order/success?paymentMethod=receive`;
+        const receive = `/order?paymentMethod=receive`;
         return receive;
       } else {
         message.error("Vui lòng chọn phương thức thanh toán nhé");
@@ -34,12 +34,14 @@ export const orderThunk = createAsyncThunk(
 );
 
 export const orderSuccessThunk = createAsyncThunk(
-  "order/success",
+  "order",
   async (data, { dispatch }) => {
     try {
       const order = await orderSuccess(data);
-      console.log(order);
+      return order;
     } catch (error) {
+      const errormsg = "Lỗi trong quá trình thanh toán";
+      return errormsg;
       throw new Error(error);
     }
   }
