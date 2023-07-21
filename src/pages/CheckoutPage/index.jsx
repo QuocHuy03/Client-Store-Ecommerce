@@ -163,8 +163,8 @@ export default function CheckoutPage() {
 
     const paymentUrl = await dispatch(orderThunk(orders));
     if (paymentUrl) {
-      navigate(paymentUrl.payload);
-      // window.location.href = paymentUrl.payload;
+      // navigate(paymentUrl.payload);
+      window.location.href = paymentUrl.payload;
     } else {
       // Handle other scenarios or errors
     }
