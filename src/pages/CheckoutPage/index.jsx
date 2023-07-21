@@ -1,6 +1,6 @@
 import Layout from "../../components/libs/Layout";
 import { Button, Form, Input, message, Select, Space } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../context/AppContextProvider";
 import { Link } from "react-router-dom";
 import address from "../../json/addresses.json";
@@ -20,6 +20,11 @@ export default function CheckoutPage() {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [wards, setWards] = useState([]);
   const [activeItem, setActiveItem] = useState(1);
+
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
+  const formRef = useRef(null);
+  const [appliedDiscounts, setAppliedDiscounts] = useState([]);
+  const [discountCode, setDiscountCode] = useState();
 
   const payments = [
     {
@@ -66,10 +71,59 @@ export default function CheckoutPage() {
     form.setFieldsValue(user);
   }, [form, user]);
 
+  useEffect(() => {
+    // Retrieve the stored discount codes from local storage on mount
+    const storedDiscounts = JSON.parse(
+      localStorage.getItem("appliedDiscounts") || "[]"
+    );
+    setAppliedDiscounts(storedDiscounts);
+  }, []);
+
   const totalAmount = carts.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
+
+  const [totalPriceCode, setTotalPriceCode] = useState(
+    totalAmount - transport_fee
+  );
+
+  const handleDiscountCodeBlur = (e) => {
+    setDiscountCode(e.target.value);
+  };
+
+  console.log(totalPriceCode);
+
+  const discoutCode = () => {
+    if (discountCode === discount_code.code) {
+      message.success("Áp Dụng Mã Giảm Giá Thành Công");
+      const discountedAmount =
+        totalAmount - transport_fee - discount_code.price;
+      setTotalPriceCode(discountedAmount);
+      formRef.current.resetFields();
+      setIsDiscountApplied(true);
+      setAppliedDiscounts([...appliedDiscounts, discountCode]);
+
+      localStorage.setItem(
+        "appliedDiscounts",
+        JSON.stringify([...appliedDiscounts, discountCode])
+      );
+    } else {
+      message.error("Mã Giảm Giá Không Chính Xác !");
+      setTotalPriceCode(totalAmount - transport_fee);
+      formRef.current.resetFields();
+    }
+  };
+
+  const handleDiscountCodeDelete = (code) => {
+    const updatedDiscounts = appliedDiscounts.filter((item) => item !== code);
+    setAppliedDiscounts(updatedDiscounts);
+
+    localStorage.setItem("appliedDiscounts", JSON.stringify(updatedDiscounts));
+
+    setTotalPriceCode(totalAmount - transport_fee);
+    formRef.current.resetFields();
+  };
 
   const onFinish = async (values) => {
     const selectedCity = provinces.find(
@@ -90,30 +144,23 @@ export default function CheckoutPage() {
     if (selectedCommune) {
       values.commune = selectedCommune.name;
     }
-
     const orders = {
       values,
       carts: carts,
-      totalPrice: totalAmount - transport_fee,
+      totalPrice: totalPriceCode,
       userID: user.id,
       methodPayment: activeItem,
     };
+    console.log(orders);
 
-    const paymentUrl = await dispatch(orderThunk(orders));
-    if (paymentUrl) {
-      window.location.href = paymentUrl.payload;
-    } else {
-      // Handle other scenarios or errors
-    }
+    // const paymentUrl = await dispatch(orderThunk(orders));
+    // if (paymentUrl) {
+    //   window.location.href = paymentUrl.payload;
+    // } else {
+    //   // Handle other scenarios or errors
+    // }
   };
 
-  const discoutCode = (data) => {
-    if (data.discount_code === discount_code) {
-      message.success("Áp Dụng Mã Giảm Giá Thành Công");
-    } else {
-      message.error("Mã Giảm Giá Không Chính Xác !");
-    }
-  };
   return (
     <Layout>
       <div className="bg-white">
@@ -459,6 +506,7 @@ export default function CheckoutPage() {
                       className="justify-around"
                       layout="inline"
                       onFinish={discoutCode}
+                      ref={formRef}
                     >
                       <Form.Item
                         name="discount_code"
@@ -470,7 +518,11 @@ export default function CheckoutPage() {
                           },
                         ]}
                       >
-                        <Input size="large" placeholder="Nhập mã giảm giá" />
+                        <Input
+                          size="large"
+                          onBlur={handleDiscountCodeBlur}
+                          placeholder="Nhập mã giảm giá"
+                        />
                       </Form.Item>
                       <Form.Item>
                         <Button
@@ -484,6 +536,23 @@ export default function CheckoutPage() {
                       </Form.Item>
                     </Form>
                   </div>
+
+                  {appliedDiscounts.map((code) => (
+                    <div
+                      key={code}
+                      className="flex py-4 border-b justify-between items-center"
+                    >
+                      <div className="mr-2">
+                        Mã giảm giá đã được áp dụng: {code}
+                      </div>
+                      <button
+                        className="ml-2 text-red-500"
+                        onClick={() => handleDiscountCodeDelete(code)}
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  ))}
 
                   <div className="py-4 border-b text-center">
                     <div className="flex justify-between">
