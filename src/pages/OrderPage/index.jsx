@@ -9,7 +9,7 @@ import { transport_fee } from "../../env";
 import { message } from "antd";
 
 export default function OrderPage() {
-  const { carts, user } = useContext(AppContext);
+  const { carts, user, discounts } = useContext(AppContext);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -35,7 +35,9 @@ export default function OrderPage() {
       if (paymentHuyNe === "vnpay") {
         const orders = {
           carts: carts,
-          totalPrice: totalAmount - transport_fee,
+          totalPrice: discounts[0]
+            ? totalAmount - discounts[0].totalPrice - transport_fee
+            : totalAmount - transport_fee,
           userID: user.id,
           paymentVnpay,
           methodPayment: paymentHuyNe,
@@ -51,7 +53,9 @@ export default function OrderPage() {
       } else if (paymentHuyNe === "receive") {
         const orders = {
           carts: carts,
-          totalPrice: totalAmount - transport_fee,
+          totalPrice: discounts[0]
+            ? totalAmount - discounts[0].totalPrice - transport_fee
+            : totalAmount - transport_fee,
           userID: user.id,
           methodPayment: paymentHuyNe,
         };

@@ -2,7 +2,7 @@ import Layout from "../../components/libs/Layout";
 import { Button, Form, Input, message, Select, Space } from "antd";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../context/AppContextProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import address from "../../json/addresses.json";
 import { orderThunk } from "../../reduxThunk/orderThunk";
 import "./style.css";
@@ -16,7 +16,7 @@ import {
 
 export default function CheckoutPage() {
   const { carts, user, discounts } = useContext(AppContext);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
@@ -160,11 +160,10 @@ export default function CheckoutPage() {
       userID: user.id,
       methodPayment: activeItem,
     };
-    console.log(orders);
 
     const paymentUrl = await dispatch(orderThunk(orders));
     if (paymentUrl) {
-      console.log(paymentUrl);
+      navigate(paymentUrl.payload);
       // window.location.href = paymentUrl.payload;
     } else {
       // Handle other scenarios or errors

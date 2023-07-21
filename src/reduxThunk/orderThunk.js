@@ -15,19 +15,19 @@ export const orderThunk = createAsyncThunk(
         dispatch(loginSuccess(updateInfos));
       }
 
-      // if (data.methodPayment === 1) {
-      //   const vnPay = await vnpayAPI(data.totalPrice);
-      //   if (vnPay && vnPay.vnpUrl) {
-      //     return vnPay.vnpUrl;
-      //   } else {
-      //     throw new Error("VNPAY URL is missing or invalid.");
-      //   }
-      // } else if (data.methodPayment === 2) {
-      //   const receive = `/order?paymentMethod=receive`;
-      //   return receive;
-      // } else {
-      //   message.error("Vui lòng chọn phương thức thanh toán nhé");
-      // }
+      if (data.methodPayment === 1) {
+        const vnPay = await vnpayAPI(data.totalPrice);
+        if (vnPay && vnPay.vnpUrl) {
+          return vnPay.vnpUrl;
+        } else {
+          throw new Error("VNPAY URL is missing or invalid.");
+        }
+      } else if (data.methodPayment === 2) {
+        const receive = `/order?paymentMethod=receive`;
+        return receive;
+      } else {
+        message.error("Vui lòng chọn phương thức thanh toán nhé");
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -37,6 +37,7 @@ export const orderThunk = createAsyncThunk(
 export const orderSuccessThunk = createAsyncThunk(
   "order",
   async (data, { dispatch }) => {
+    console.log(data)
     try {
       const order = await orderSuccess(data);
       return order;
