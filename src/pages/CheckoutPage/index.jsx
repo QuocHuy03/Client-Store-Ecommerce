@@ -27,9 +27,7 @@ export default function CheckoutPage() {
   const [wards, setWards] = useState([]);
   const [activeItem, setActiveItem] = useState(1);
 
-  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
   const formRef = useRef(null);
-  const [appliedDiscounts, setAppliedDiscounts] = useState([]);
   const [discountCode, setDiscountCode] = useState();
 
   const payments = [
@@ -77,25 +75,21 @@ export default function CheckoutPage() {
     form.setFieldsValue(user);
   }, [form, user]);
 
-  useEffect(() => {
-    const fetchDiscounts = async () => {
-      try {
-        await dispatch(getDiscountThunk());
-      } catch (error) {
-        console.error("Error fetching discounts:", error);
-      }
-    };
+  const fetchDiscounts = async () => {
+    try {
+      await dispatch(getDiscountThunk());
+    } catch (error) {
+      console.error("Error fetching discounts:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchDiscounts();
   }, [dispatch]);
 
   const totalAmount = carts.reduce(
     (total, item) => total + item.price * item.quantity,
     0
-  );
-
-  const [totalPriceCode, setTotalPriceCode] = useState(
-    totalAmount - transport_fee
   );
 
   const handleDiscountCodeBlur = (e) => {
@@ -115,18 +109,14 @@ export default function CheckoutPage() {
       );
 
       if (postApplyDiscount.payload.status === true) {
-        message.error(postApplyDiscount.payload.message);
-        const discountedAmount = totalAmount - transport_fee - discounts.price;
-        setTotalPriceCode(discountedAmount);
+        message.success(postApplyDiscount.payload.message);
       } else {
         message.error(postApplyDiscount.payload.message);
       }
-
+      fetchDiscounts();
       formRef.current.resetFields();
-      setIsDiscountApplied(true);
     } else {
       message.error("Mã Giảm Giá Không Chính Xác !");
-      setTotalPriceCode(totalAmount - transport_fee);
       formRef.current.resetFields();
     }
   };
@@ -134,11 +124,11 @@ export default function CheckoutPage() {
   const handleDiscountCodeDelete = async (code) => {
     const postDeleteDiscount = await dispatch(deleteDiscountThunk(code));
     if (postDeleteDiscount.payload.status === true) {
-      message.error(postDeleteDiscount.payload.message);
+      message.success(postDeleteDiscount.payload.message);
     } else {
       message.error(postDeleteDiscount.payload.message);
     }
-    setTotalPriceCode(totalAmount - transport_fee);
+    fetchDiscounts();
     formRef.current.resetFields();
   };
 
@@ -164,7 +154,9 @@ export default function CheckoutPage() {
     const orders = {
       values,
       carts: carts,
-      totalPrice: totalPriceCode,
+      totalPrice: discounts[0]
+        ? totalAmount - discounts[0].totalPrice - transport_fee
+        : totalAmount - transport_fee,
       userID: user.id,
       methodPayment: activeItem,
     };
