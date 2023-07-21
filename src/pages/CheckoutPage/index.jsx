@@ -101,8 +101,6 @@ export default function CheckoutPage() {
 
   const discoutCode = async () => {
     if (discountCode === discount_code.code) {
-      message.success("Áp Dụng Mã Giảm Giá Thành Công");
-
       const dispatchApply = {
         name: discount_code.code,
         userID: user.id,
@@ -113,9 +111,14 @@ export default function CheckoutPage() {
         applyDiscountThunk(dispatchApply)
       );
 
-      const discountedAmount =
-        totalAmount - transport_fee - discount_code.price;
-      setTotalPriceCode(discountedAmount);
+      if (postApplyDiscount.payload.status === true) {
+        message.error(postApplyDiscount.payload.message);
+        const discountedAmount =
+          totalAmount - transport_fee - discount_code.price;
+        setTotalPriceCode(discountedAmount);
+      } else {
+        message.error(postApplyDiscount.payload.message);
+      }
 
       formRef.current.resetFields();
       setIsDiscountApplied(true);
