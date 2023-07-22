@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { orderSuccessThunk } from "../../reduxThunk/orderThunk";
+import { getOrderThunk } from "../../reduxThunk/orderThunk";
 
 const initialState = {
   orders: null,
@@ -10,30 +10,30 @@ const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    postOrderSuccess: (state, action) => {
+    fetchOrderSuccess: (state, action) => {
       state.orders = action.payload;
       state.error = null;
     },
 
-    postOrderError: (state, action) => {
+    fetchOrderError: (state, action) => {
       state.orders = null;
       state.error = action.payload.message;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(orderSuccessThunk.fulfilled, (state, action) => {
+      .addCase(getOrderThunk.fulfilled, (state, action) => {
         state.orders = action.payload;
         state.error = null;
       })
-      .addCase(orderSuccessThunk.rejected, (state, action) => {
+      .addCase(getOrderThunk.rejected, (state, action) => {
         state.orders = null;
         state.error = action.error.message;
       });
   },
 });
 
-export const { postOrderSuccess, postOrderError } = orderSlice.actions;
+export const { fetchOrderSuccess, fetchOrderError } = orderSlice.actions;
 export const orderSelector = (state) => state.order;
 
 export default orderSlice.reducer;

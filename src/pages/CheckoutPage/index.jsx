@@ -77,7 +77,7 @@ export default function CheckoutPage() {
 
   const fetchDiscounts = async () => {
     try {
-      await dispatch(getDiscountThunk());
+      await dispatch(getDiscountThunk(user.id));
     } catch (error) {
       console.error("Error fetching discounts:", error);
     }
@@ -85,7 +85,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     fetchDiscounts();
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   const totalAmount = carts.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -546,22 +546,24 @@ export default function CheckoutPage() {
                     </Form>
                   </div>
 
-                  {discounts.map((code) => (
-                    <div
-                      key={code.id}
-                      className="flex py-4 border-b justify-between items-center"
-                    >
-                      <div className="mr-2">
-                        Mã giảm giá đã được áp dụng : {code.name}
-                      </div>
-                      <button
-                        className="ml-2 text-red-500"
-                        onClick={() => handleDiscountCodeDelete(code.id)}
-                      >
-                        Xóa
-                      </button>
-                    </div>
-                  ))}
+                  {discounts
+                    ? discounts.map((code) => (
+                        <div
+                          key={code.id}
+                          className="flex py-4 border-b justify-between items-center"
+                        >
+                          <div className="mr-2">
+                            Mã giảm giá đã được áp dụng : {code.name}
+                          </div>
+                          <button
+                            className="ml-2 text-red-500"
+                            onClick={() => handleDiscountCodeDelete(code.id)}
+                          >
+                            Xóa
+                          </button>
+                        </div>
+                      ))
+                    : []}
 
                   <div className="py-4 border-b text-center">
                     <div className="flex justify-between">
@@ -580,7 +582,7 @@ export default function CheckoutPage() {
                         {transport_fee.toLocaleString()}
                       </div>
                     </div>
-                    {discounts[0] ? (
+                    {discounts && discounts[0] ? (
                       <div className="flex justify-between pt-2">
                         <div className="text-base font-light text-slate-400">
                           - Mã Giảm Giá
@@ -600,7 +602,7 @@ export default function CheckoutPage() {
                         Tổng Cộng
                       </div>
                       <div className="text-lg font-semibold text-blue-400">
-                        {`${(discounts[0]
+                        {`${(discounts && discounts[0]
                           ? totalAmount -
                             discounts[0].totalPrice -
                             transport_fee

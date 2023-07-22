@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getDiscountThunk } from "../../reduxThunk/discountThunk";
 
 const initialState = {
-  discounts: null,
+  discounts: [],
   error: null,
 };
 
@@ -16,7 +16,7 @@ const discountSlice = createSlice({
     },
 
     fetchDiscountsError: (state, action) => {
-      state.discounts = null;
+      state.discounts = [];
       state.error = action.payload.message;
     },
 

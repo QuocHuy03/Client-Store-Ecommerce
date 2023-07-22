@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getOrderThunk } from "../../reduxThunk/orderThunk";
 
@@ -19,7 +19,7 @@ export default function ListOrderPage() {
 
   useEffect(() => {
     fetchOrders();
-  }, [dispatch]);
+  }, [dispatch,user]);
 
   console.log(orders);
   return <div>ListOrderPage</div>;

@@ -11,9 +11,9 @@ export const applyDiscount = async (data) => {
   }
 };
 
-export const getDiscount = async () => {
+export const getDiscountByID = async (id) => {
   try {
-    const response = await http.get("/getAllDiscount");
+    const response = await http.get(`/getDiscountById/${id}`);
     return response;
   } catch (error) {
     console.error(error);

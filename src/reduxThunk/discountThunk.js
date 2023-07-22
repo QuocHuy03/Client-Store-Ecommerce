@@ -2,14 +2,15 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   applyDiscount,
   deleteDiscount,
-  getDiscount,
+  getDiscountByID,
 } from "../utils/api/discountApi";
 
 export const getDiscountThunk = createAsyncThunk(
   "getDiscount",
   async (data, { dispatch }) => {
     try {
-      const list = await getDiscount();
+
+      const list = await getDiscountByID(data);
       if (list) {
         return list;
       }
