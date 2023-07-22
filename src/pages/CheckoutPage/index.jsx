@@ -16,6 +16,7 @@ import {
 
 export default function CheckoutPage() {
   const { carts, user, discounts } = useContext(AppContext);
+  console.log(discounts);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
@@ -154,13 +155,13 @@ export default function CheckoutPage() {
     const orders = {
       values,
       carts: carts,
-      totalPrice: discounts[0]
-        ? totalAmount - discounts[0].totalPrice - transport_fee
+      totalPrice: discounts
+        ? totalAmount - discounts.totalPrice - transport_fee
         : totalAmount - transport_fee,
       userID: user.id,
       methodPayment: activeItem,
     };
-
+ 
     const paymentUrl = await dispatch(orderThunk(orders));
     if (paymentUrl) {
       // navigate(paymentUrl.payload);
@@ -546,24 +547,19 @@ export default function CheckoutPage() {
                     </Form>
                   </div>
 
-                  {discounts
-                    ? discounts.map((code) => (
-                        <div
-                          key={code.id}
-                          className="flex py-4 border-b justify-between items-center"
-                        >
-                          <div className="mr-2">
-                            Mã giảm giá đã được áp dụng : {code.name}
-                          </div>
-                          <button
-                            className="ml-2 text-red-500"
-                            onClick={() => handleDiscountCodeDelete(code.id)}
-                          >
-                            Xóa
-                          </button>
-                        </div>
-                      ))
-                    : []}
+                  {discounts && (
+                    <div className="flex py-4 border-b justify-between items-center">
+                      <div className="mr-2">
+                        Mã giảm giá đã được áp dụng: {discounts.name}
+                      </div>
+                      <button
+                        className="ml-2 text-red-500"
+                        onClick={() => handleDiscountCodeDelete(discounts.id)}
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  )}
 
                   <div className="py-4 border-b text-center">
                     <div className="flex justify-between">
@@ -582,13 +578,13 @@ export default function CheckoutPage() {
                         {transport_fee.toLocaleString()}
                       </div>
                     </div>
-                    {discounts && discounts[0] ? (
+                    {discounts ? (
                       <div className="flex justify-between pt-2">
                         <div className="text-base font-light text-slate-400">
                           - Mã Giảm Giá
                         </div>
                         <div className="text-base text-slate-500">
-                          {discounts[0].totalPrice.toLocaleString("vi-VN")}
+                          {discounts.totalPrice.toLocaleString("vi-VN")}
                         </div>
                       </div>
                     ) : (
@@ -602,10 +598,8 @@ export default function CheckoutPage() {
                         Tổng Cộng
                       </div>
                       <div className="text-lg font-semibold text-blue-400">
-                        {`${(discounts && discounts[0]
-                          ? totalAmount -
-                            discounts[0].totalPrice -
-                            transport_fee
+                        {`${(discounts
+                          ? totalAmount - discounts.totalPrice - transport_fee
                           : totalAmount - transport_fee
                         ).toLocaleString("vi-VN")}`}
                       </div>
