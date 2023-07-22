@@ -160,7 +160,7 @@ export default function CheckoutPage() {
       userID: user.id,
       methodPayment: activeItem,
     };
- 
+
     const paymentUrl = await dispatch(orderThunk(orders));
     if (paymentUrl) {
       // navigate(paymentUrl.payload);
