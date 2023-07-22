@@ -16,7 +16,6 @@ import {
 
 export default function CheckoutPage() {
   const { carts, user, discounts } = useContext(AppContext);
-  console.log(discounts);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
@@ -584,7 +583,7 @@ export default function CheckoutPage() {
                           - Mã Giảm Giá
                         </div>
                         <div className="text-base text-slate-500">
-                          {discounts.totalPrice.toLocaleString("vi-VN")}
+                          {discounts.totalPrice?.toLocaleString()}
                         </div>
                       </div>
                     ) : (

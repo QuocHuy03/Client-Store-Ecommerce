@@ -35,8 +35,8 @@ export default function OrderPage() {
       if (paymentHuyNe === "vnpay") {
         const orders = {
           carts: carts,
-          totalPrice: discounts[0]
-            ? totalAmount - discounts[0].totalPrice - transport_fee
+          totalPrice: discounts
+            ? totalAmount - discounts.totalPrice - transport_fee
             : totalAmount - transport_fee,
           userID: user.id,
           paymentVnpay,
@@ -54,8 +54,8 @@ export default function OrderPage() {
       } else if (paymentHuyNe === "receive") {
         const orders = {
           carts: carts,
-          totalPrice: discounts[0]
-            ? totalAmount - discounts[0].totalPrice - transport_fee
+          totalPrice: discounts
+            ? totalAmount - discounts.totalPrice - transport_fee
             : totalAmount - transport_fee,
           userID: user.id,
           methodPayment: paymentHuyNe,
