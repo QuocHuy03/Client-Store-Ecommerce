@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { vnpayAPI } from "../utils/api/paymentApi";
 import { message } from "antd";
-import { orderSuccess } from "../utils/api/orderApi";
+import { getOrderByID, orderSuccess } from "../utils/api/orderApi";
 import { updateInfo } from "../utils/api/userApi";
 import { loginSuccess } from "../stores/authSlice";
 
@@ -37,10 +37,24 @@ export const orderThunk = createAsyncThunk(
 export const orderSuccessThunk = createAsyncThunk(
   "order",
   async (data, { dispatch }) => {
-    console.log(data)
+    console.log(data);
     try {
       const order = await orderSuccess(data);
       return order;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+
+export const getOrderThunk = createAsyncThunk(
+  "getOrder",
+  async (data, { dispatch }) => {
+    try {
+      const list = await getOrderByID(data);
+      if (list) {
+        return list;
+      }
     } catch (error) {
       throw new Error(error);
     }

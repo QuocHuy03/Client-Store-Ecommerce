@@ -576,7 +576,9 @@ export default function CheckoutPage() {
                       <div className="text-base font-light text-slate-400">
                         - Phí Vận Chuyển
                       </div>
-                      <div className="text-base text-slate-500">{transport_fee.toLocaleString()}</div>
+                      <div className="text-base text-slate-500">
+                        {transport_fee.toLocaleString()}
+                      </div>
                     </div>
                     {discounts[0] ? (
                       <div className="flex justify-between pt-2">
