@@ -43,7 +43,7 @@ export default function OrderPage() {
           methodPayment: paymentHuyNe,
         };
         const res = await dispatch(orderSuccessThunk(orders));
-        console.log(res)
+        console.log(res);
         if (res.payload.status === true) {
           message.success(res.payload.message);
           navigate("/list-order");
@@ -61,7 +61,7 @@ export default function OrderPage() {
           methodPayment: paymentHuyNe,
         };
         const res = await dispatch(orderSuccessThunk(orders));
-        
+
         if (res.payload.status === true) {
           message.success(res.payload.message);
           navigate("/list-order");
@@ -73,7 +73,6 @@ export default function OrderPage() {
         console.log("Huy Nè!");
       }
     } catch (error) {
-      
       console.log(error);
     }
   };

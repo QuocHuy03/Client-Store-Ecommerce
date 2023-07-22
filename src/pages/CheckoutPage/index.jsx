@@ -576,8 +576,20 @@ export default function CheckoutPage() {
                       <div className="text-base font-light text-slate-400">
                         - Phí Vận Chuyển
                       </div>
-                      <div className="text-base text-slate-500">40000</div>
+                      <div className="text-base text-slate-500">40.000</div>
                     </div>
+                    {discounts[0] ? (
+                      <div className="flex justify-between pt-2">
+                        <div className="text-base font-light text-slate-400">
+                          - Mã Giảm Giá
+                        </div>
+                        <div className="text-base text-slate-500">
+                          {discounts[0].totalPrice.toLocaleString("vi-VN")}
+                        </div>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
 
                   <div className="py-4 text-center">
@@ -586,9 +598,12 @@ export default function CheckoutPage() {
                         Tổng Cộng
                       </div>
                       <div className="text-lg font-semibold text-blue-400">
-                        {`${(totalAmount - transport_fee).toLocaleString(
-                          "vi-VN"
-                        )}`}
+                        {`${(discounts[0]
+                          ? totalAmount -
+                            discounts[0].totalPrice -
+                            transport_fee
+                          : totalAmount - transport_fee
+                        ).toLocaleString("vi-VN")}`}
                       </div>
                     </div>
                   </div>
