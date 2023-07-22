@@ -22,6 +22,5 @@ export default function ListOrderPage() {
     fetchOrders();
   }, [dispatch, user]);
 
-  console.log(orders);
   return <div>ListOrderPage</div>;
 }
