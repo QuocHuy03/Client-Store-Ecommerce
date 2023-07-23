@@ -1,17 +1,15 @@
 import { Table, Button } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const TabItem = ({ orders, columns }) => {
   const navigate = useNavigate();
 
   const renderAction = (record) => {
-    console.log(record);
     return <Button onClick={() => handleButtonClick(record)}>Chi Tiết</Button>;
   };
 
   const handleButtonClick = (record) => {
-    console.log(record);
     navigate(`/detail-order/${record.code}`);
   };
 
@@ -36,6 +34,29 @@ const TabItem = ({ orders, columns }) => {
         }
       : column
   );
+
+  // set time hủy đơn
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const updatedData = orders.map((order) => {
+        if (order.status === "Chưa Thanh Toán") {
+          // Set order status to "cancelled" after 1 hour
+          return {
+            ...order,
+            status: "cancelled",
+          };
+        }
+        return order;
+      });
+      setData(updatedData);
+    }, 1000 * 60 * 60); // 1 hour in milliseconds
+
+    return () => {
+      clearInterval(timer); // Cleanup the timer when the component unmounts
+    };
+  }, [orders]);
+
   // const onChange = (pagination, filters, sorter, extra) => {
   //   console.log("params", pagination, filters, sorter, extra);
   // };
