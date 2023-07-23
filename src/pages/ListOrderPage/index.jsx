@@ -73,6 +73,11 @@ export default function ListOrderPage() {
       title: "Thời Gian",
       dataIndex: "createdAt",
     },
+
+    {
+      title: "Thao Tác",
+      dataIndex: "detailProduct",
+    },
   ];
 
   return (
