@@ -55,19 +55,23 @@ export default function ListOrderPage() {
       sorter: (a, b) => a.totalPrice - b.totalPrice,
     },
     {
-      title: "Address",
-      dataIndex: "address",
+      title: "Tình Trạng",
+      dataIndex: "status",
       filters: [
         {
-          text: "London",
-          value: "London",
+          text: "Đã Thanh Toán",
+          value: "Đã Thanh Toán",
         },
         {
-          text: "New York",
-          value: "New York",
+          text: "Chưa Thanh Toán",
+          value: "Chưa Thanh Toán",
         },
       ],
-      onFilter: (value, record) => record.address.indexOf(value) === 0,
+      onFilter: (value, record) => record.status.indexOf(value) === 0,
+    },
+    {
+      title: "Thời Gian",
+      dataIndex: "createdAt",
     },
   ];
 

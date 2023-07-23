@@ -3,7 +3,6 @@ import { Tabs } from "antd";
 import TabItem from "../TabItem";
 
 const TabList = ({ items, columns }) => {
-  console.log(items);
   return (
     <Tabs>
       {items.map((item) => (
