@@ -1,11 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { getOrderThunk } from "../../reduxThunk/orderThunk";
 import { AppContext } from "../../context/AppContextProvider";
 import Layout from "../../components/libs/Layout";
-import { Tabs } from "antd";
+import { Empty } from "antd";
 import TabList from "../../components/TabList";
 
 export default function ListOrderPage() {

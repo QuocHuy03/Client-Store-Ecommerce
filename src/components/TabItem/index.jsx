@@ -1,6 +1,7 @@
 import { Table, Button } from "antd";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { updateStatusCancel } from "../../utils/api/orderApi";
 
 const TabItem = ({ orders, columns }) => {
   const navigate = useNavigate();
@@ -38,22 +39,41 @@ const TabItem = ({ orders, columns }) => {
   // set time hủy đơn
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      const updatedData = orders.map((order) => {
-        if (order.status === "Chưa Thanh Toán") {
-          // Set order status to "cancelled" after 1 hour
-          return {
-            ...order,
-            status: "cancelled",
-          };
-        }
-        return order;
-      });
-      setData(updatedData);
-    }, 1000 * 60 * 60); // 1 hour in milliseconds
+    if (orders.length === 0) return;
+
+    const earliestOrderTime = Math.min(
+      ...orders.map((order) => new Date(order.createdAt).getTime())
+    );
+
+    const timer = setInterval(async () => {
+      const currentTime = new Date().getTime();
+      const cancellationTime = earliestOrderTime + 15 * 60 * 1000; // 15 minutes in milliseconds
+      if (currentTime >= cancellationTime) {
+        const updatedData = await Promise.all(
+          orders.map(async (order) => {
+            if (order.status === "Chưa Thanh Toán") {
+              const createdAtTime = new Date(order.createdAt).getTime();
+              const fifteenMinutesLater = createdAtTime + 15 * 60 * 1000; // 15 minutes in milliseconds
+              if (currentTime >= fifteenMinutesLater) {
+                // Apply the cancellation logic for the order
+                // await updateStatusCancel(order.id, "Đã Hủy");
+                console.log(order)
+                return {
+                  ...order,
+                  status: "Đã Hủy",
+                };
+              }
+            }
+            return order;
+          })
+        );
+console.log(updatedData)
+        // setData(updatedData); // Update the data state with modified order statuses
+      }
+    }, 5000); // 1 minute (you can adjust the interval as per your requirement)
 
     return () => {
-      clearInterval(timer); // Cleanup the timer when the component unmounts
+      clearInterval(timer);
     };
   }, [orders]);
 

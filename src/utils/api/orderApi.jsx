@@ -28,3 +28,12 @@ export const getOrderByID = async (id) => {
     console.error(error);
   }
 };
+
+export const updateStatusCancel = async (id, data) => {
+  try {
+    const response = await http.update(`/updateStatus/${id}`, { data });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
