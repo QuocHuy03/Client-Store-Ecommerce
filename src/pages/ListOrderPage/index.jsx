@@ -10,7 +10,6 @@ import TabList from "../../components/TabList";
 
 export default function ListOrderPage() {
   const { user, orders } = useContext(AppContext);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const fetchOrders = async () => {
@@ -24,7 +23,9 @@ export default function ListOrderPage() {
   useEffect(() => {
     fetchOrders();
   }, [dispatch, user]);
+
   // tabs
+
   const items = [
     {
       key: "1",
@@ -42,7 +43,9 @@ export default function ListOrderPage() {
       children: orders,
     },
   ];
+
   // table
+
   const columns = [
     {
       title: "Mã Đơn Hàng",
@@ -80,6 +83,12 @@ export default function ListOrderPage() {
     },
   ];
 
+  // change key
+
+  const changeStatus = (key) => {
+    console.log(key);
+  };
+
   return (
     <Layout>
       <div className="bg-white">
@@ -90,7 +99,11 @@ export default function ListOrderPage() {
               <div className="lg:col-span-12">
                 <ul>
                   {orders && orders.length > 0 ? (
-                    <TabList items={items} columns={columns} />
+                    <TabList
+                      items={items}
+                      columns={columns}
+                      changeStatus={changeStatus}
+                    />
                   ) : (
                     <p className="text-center">
                       <Empty />
