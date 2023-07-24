@@ -37,3 +37,12 @@ export const updateStatusCancel = async (id, data) => {
     throw error;
   }
 };
+
+export const getOrderByCode = async (code) => {
+  try {
+    const response = await http.get(`/getOrderByCode/${code}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};

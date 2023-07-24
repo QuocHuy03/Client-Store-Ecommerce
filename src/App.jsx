@@ -12,6 +12,7 @@ import { clientID } from "./env";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderPage from "./pages/OrderPage";
 import ListOrderPage from "./pages/ListOrderPage";
+import DetailOrderPage from "./pages/DetailOrderPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/checkout/:uid" element={<CheckoutPage />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/list-order" element={<ListOrderPage />} />
+          <Route path="/detail-order/:code" element={<DetailOrderPage />} />
 
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
