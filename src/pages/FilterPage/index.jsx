@@ -1,27 +1,21 @@
+import { useQuery } from "@tanstack/react-query";
 import Layout from "../../components/libs/Layout";
+import { fetchAllCategories } from "../../utils/api/categoriesApi";
 
 const FilterPage = () => {
+  const { data: dataCategories, isLoading } = useQuery(
+    ["categories"],
+    () => fetchAllCategories(),
+    {
+      staleTime: 1000,
+    }
+  );
+
   return (
     <Layout>
-      {" "}
       <div className="bg-white">
         <div className="mx-auto max-w-7xl">
-          <div className="p-4 sm:p-6 lg:p-8 rounded-xl overflow-hidden">
-            <div
-              className="rounded-xl relative aspect-square md:aspect-[2.4/1] overflow-hidden bg-cover"
-              style={{
-                backgroundImage:
-                  'url("https://res.cloudinary.com/dckypb6to/image/upload/v1689066722/bq6rk4fmw1lookysmwx6.gif")',
-              }}
-            >
-              <div className="h-full w-full flex flex-col justify-center items-center text-center gap-y-8">
-                <div className="font-bold text-3xl sm:text-5xl lg:text-6xl sm:max-w-xl max-w-xs">
-                  Hãy trải nghiệm 
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="px-4 sm:px-6 lg:px-8 pb-24">
+          <div className="mt-10 px-4 sm:px-6 lg:px-8 pb-24">
             <div className="lg:grid lg:grid-cols-5 lg:gap-x-8">
               <button
                 type="button"
@@ -62,57 +56,25 @@ const FilterPage = () => {
               />
               <div className="hidden lg:block">
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold">Sizes</h3>
+                  <h3 className="text-lg font-semibold">Thương Hiệu</h3>
                   <hr className="my-4" />
-                  <div className="flex flex-wrap gap-2">
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Medium
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Extra Small
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Large
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Extra Large
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Extra Extra Small
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Small
-                      </button>
-                    </div>
+                  <div className="flex flex-wrap gap-3">
+                    {dataCategories?.map((item) => (
+                      <div className="flex items-center">
+                        <input
+                          id={`checker_${item.id}`}
+                          type="checkbox"
+                          defaultValue
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          htmlFor={`checker_${item.id}`}
+                          className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          {item.nameCategory}
+                        </label>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className="mb-8">
