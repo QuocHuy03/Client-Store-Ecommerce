@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useContext, useRef, useState } from "react";
 import { AppContext } from "../../context/AppContextProvider";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllCategories } from "../../utils/api/categoriesApi";
 
 const Header = () => {
   const { user, carts } = useContext(AppContext);
@@ -19,6 +21,15 @@ const Header = () => {
   const handleDropdownToggle = () => {
     setIsOpen(!isOpen);
   };
+
+  const { data, isLoading } = useQuery(
+    ["categories"],
+    () => fetchAllCategories(),
+    {
+      staleTime: 1000,
+    }
+  );
+
   return (
     <div className="border-b">
       <div className="mx-auto max-w-7xl">
@@ -96,38 +107,16 @@ const Header = () => {
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdown-button"
                 >
-                  <li>
-                    <button
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Mockups
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Templates
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Design
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Logos
-                    </button>
-                  </li>
+                  {data?.map((item) => (
+                    <li key={item.id}>
+                      <Link
+                        to={`/c/${item.slugCategory}`}
+                        className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        {item.nameCategory}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
             )}
