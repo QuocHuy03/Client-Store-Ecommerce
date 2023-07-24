@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ModalProduct from "../../components/ModalProduct";
 import Layout from "../../components/libs/Layout";
 import { AppContext } from "../../context/AppContextProvider";
@@ -17,6 +17,7 @@ const HomePage = () => {
   const [showColorError, setShowColorError] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -42,7 +43,33 @@ const HomePage = () => {
     }
   };
 
-  const addProduct = (product) => {
+  const buy_now = (product) => {
+    if (!selectedColor) {
+      setShowColorError(true);
+      return;
+    }
+
+    const { id, nameProduct, price_has_ropped, imagePaths, nameCategory } =
+      product;
+    dispatch(
+      addToCart({
+        product: {
+          id,
+          name: nameProduct,
+          color: selectedColor,
+          price: price_has_ropped,
+          image: imagePaths,
+          category: nameCategory,
+        },
+        quantity,
+      })
+    );
+    message.success(`Thêm Sản Phẩm Vào Giỏ Hàng Success`);
+    navigate("/cart");
+    setIsOpenModal(false);
+  };
+
+  const add_to_cart = (product) => {
     if (!selectedColor) {
       setShowColorError(true);
       return;
@@ -406,6 +433,7 @@ const HomePage = () => {
                                 <div className="mt-6 flex items-center gap-x-3">
                                   <button
                                     type="button"
+                                    onClick={() => buy_now(item)}
                                     style={{ flex: 1 }}
                                     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                   >
@@ -413,7 +441,7 @@ const HomePage = () => {
                                   </button>
                                   <button
                                     type="button"
-                                    onClick={() => addProduct(item)}
+                                    onClick={() => add_to_cart(item)}
                                     style={{ flex: 1 }}
                                     className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                   >

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../../components/libs/Layout";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   fetchProductBySlug,
@@ -13,11 +13,12 @@ import Loading from "../../components/Loading";
 
 const DetailPage = () => {
   const { slug } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState(null);
   const [showColorError, setShowColorError] = useState(false);
   const [isSlug, setIsSlug] = useState(slug || "");
-  const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -60,7 +61,32 @@ const DetailPage = () => {
     }
   };
 
-  const addProduct = (product) => {
+  const buy_now = (product) => {
+    if (!selectedColor) {
+      setShowColorError(true);
+      return;
+    }
+
+    const { id, nameProduct, price_has_ropped, imagePaths, nameCategory } =
+      product;
+    dispatch(
+      addToCart({
+        product: {
+          id,
+          name: nameProduct,
+          color: selectedColor,
+          price: price_has_ropped,
+          image: imagePaths,
+          category: nameCategory,
+        },
+        quantity,
+      })
+    );
+    message.success(`Thêm Sản Phẩm Vào Giỏ Hàng Success`);
+    navigate("/cart");
+  };
+
+  const add_to_cart = (product) => {
     if (!selectedColor) {
       setShowColorError(true);
       return;
@@ -339,13 +365,14 @@ const DetailPage = () => {
                         <button
                           type="button"
                           style={{ flex: 1 }}
+                          onClick={() => buy_now(product)}
                           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                         >
                           Mua Ngay
                         </button>
                         <button
                           type="button"
-                          onClick={() => addProduct(product)}
+                          onClick={() => add_to_cart(product)}
                           style={{ flex: 1 }}
                           className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                         >
