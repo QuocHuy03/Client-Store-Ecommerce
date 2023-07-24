@@ -11,6 +11,64 @@ const FilterPage = () => {
     }
   );
 
+  const dataColors = [
+    {
+      id: 1,
+      name: "black",
+    },
+    {
+      id: 2,
+      name: "red",
+    },
+    {
+      id: 3,
+      name: "yellow",
+    },
+  ];
+
+  const dataPrice = [
+    {
+      id: 1,
+      price: "< 5",
+      text: "Dưới 5 Triệu",
+    },
+    {
+      id: 2,
+      price: "5 - 7",
+      text: "Từ 5 - 7 Triệu",
+    },
+    {
+      id: 3,
+      price: "7 - 10",
+      text: "Từ 7 - 10 Triệu",
+    },
+    {
+      id: 4,
+      price: "10 - 15",
+      text: "Từ 10 - 15 Triệu",
+    },
+    {
+      id: 5,
+      price: "15 - 20",
+      text: "Từ 15 - 20 Triệu",
+    },
+    {
+      id: 6,
+      price: "20 - 25",
+      text: "Từ 20 - 25 Triệu",
+    },
+    {
+      id: 6,
+      price: "25 - 30",
+      text: "Từ 25 - 30 Triệu",
+    },
+    {
+      id: 6,
+      price: "> 30",
+      text: "Trên 30 Triệu",
+    },
+  ];
+
   return (
     <Layout>
       <div className="bg-white">
@@ -55,20 +113,20 @@ const FilterPage = () => {
                 }}
               />
               <div className="hidden lg:block">
-                <div className="mb-8">
+                <div className="mb-6">
                   <h3 className="text-lg font-semibold">Thương Hiệu</h3>
                   <hr className="my-4" />
                   <div className="flex flex-wrap gap-3">
                     {dataCategories?.map((item) => (
                       <div className="flex items-center">
                         <input
-                          id={`checker_${item.id}`}
+                          id={`checker_category${item.id}`}
                           type="checkbox"
                           defaultValue
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         />
                         <label
-                          htmlFor={`checker_${item.id}`}
+                          htmlFor={`checker_category${item.id}`}
                           className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                         >
                           {item.nameCategory}
@@ -77,66 +135,49 @@ const FilterPage = () => {
                     ))}
                   </div>
                 </div>
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold">Colors</h3>
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold">Màu Sắc</h3>
                   <hr className="my-4" />
-                  <div className="flex flex-wrap gap-2">
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Đen
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Xanh lá
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Hồng
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Hồng nhạt
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Vàng
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Xám
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="w-auto border-transparent disabled:cursor-not-allowed disabled:opacity-50 font-semibold hover:opacity-75 transition rounded-md text-sm text-gray-800 p-2 bg-white border boder-gray-300"
-                      >
-                        Trắng
-                      </button>
-                    </div>
+                  <div className="flex flex-wrap gap-3">
+                    {dataColors?.map((item) => (
+                      <div className="flex items-center">
+                        <input
+                          id={`checker_color${item.id}`}
+                          type="checkbox"
+                          defaultValue
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          htmlFor={`checker_color${item.id}`}
+                          className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 capitalize"
+                        >
+                          {item.name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold">Mức Giá</h3>
+                  <hr className="my-4" />
+                  <div className="flex flex-wrap gap-3">
+                    {dataPrice?.map((item) => (
+                      <div className="flex items-center">
+                        <input
+                          id={`checker_price${item.id}`}
+                          type="checkbox"
+                          defaultValue
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          htmlFor={`checker_price${item.id}`}
+                          className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 capitalize"
+                        >
+                          {item.text}
+                        </label>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
