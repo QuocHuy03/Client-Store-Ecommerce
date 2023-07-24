@@ -8,7 +8,6 @@ import { loginSuccess } from "../stores/authSlice";
 export const orderThunk = createAsyncThunk(
   "checkout",
   async (data, { dispatch }) => {
-    console.log(data);
     try {
       const updateInfos = await updateInfo(data);
       if (updateInfos) {
@@ -37,7 +36,6 @@ export const orderThunk = createAsyncThunk(
 export const orderSuccessThunk = createAsyncThunk(
   "order",
   async (data, { dispatch }) => {
-    console.log(data);
     try {
       const order = await orderSuccess(data);
       return order;

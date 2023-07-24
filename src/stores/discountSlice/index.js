@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getDiscountThunk } from "../../reduxThunk/discountThunk";
 
 const initialState = {
-  discounts: [],
+  discounts: null,
   error: null,
 };
 

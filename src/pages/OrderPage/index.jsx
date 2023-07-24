@@ -35,15 +35,15 @@ export default function OrderPage() {
       if (paymentHuyNe === "vnpay") {
         const orders = {
           carts: carts,
-          totalPrice: discounts
-            ? totalAmount - discounts.totalPrice - transport_fee
-            : totalAmount - transport_fee,
+          totalPrice:
+            discounts !== null
+              ? totalAmount - discounts.totalPrice - transport_fee
+              : totalAmount - transport_fee,
           userID: user.id,
           paymentVnpay,
           methodPayment: paymentHuyNe,
         };
         const res = await dispatch(orderSuccessThunk(orders));
-        console.log(res);
         if (res.payload.status === true) {
           message.success(res.payload.message);
           navigate("/list-order");
@@ -54,12 +54,14 @@ export default function OrderPage() {
       } else if (paymentHuyNe === "receive") {
         const orders = {
           carts: carts,
-          totalPrice: discounts
-            ? totalAmount - discounts.totalPrice - transport_fee
-            : totalAmount - transport_fee,
+          totalPrice:
+            discounts !== null
+              ? totalAmount - discounts.totalPrice - transport_fee
+              : totalAmount - transport_fee,
           userID: user.id,
           methodPayment: paymentHuyNe,
         };
+
         const res = await dispatch(orderSuccessThunk(orders));
 
         if (res.payload.status === true) {
@@ -74,6 +76,7 @@ export default function OrderPage() {
       }
     } catch (error) {
       console.log(error);
+      navigate(`/checkout/${uuidv4()}`);
     }
   };
 
