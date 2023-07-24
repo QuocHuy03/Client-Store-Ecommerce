@@ -104,9 +104,9 @@ export default function ListOrderPage() {
                       changeStatus={changeStatus}
                     />
                   ) : (
-                    <p className="text-center">
+                    <span className="text-center">
                       <Empty />
-                    </p>
+                    </span>
                   )}
                 </ul>
               </div>
