@@ -1,11 +1,11 @@
 import { Table, Button } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateStatusCancel } from "../../utils/api/orderApi";
 
 const TabItem = ({ orders, columns }) => {
   const navigate = useNavigate();
-
+  const timerRef = useRef(null);
   const renderAction = (record) => {
     return <Button onClick={() => handleButtonClick(record)}>Chi Tiết</Button>;
   };
@@ -38,44 +38,36 @@ const TabItem = ({ orders, columns }) => {
 
   // set time hủy đơn
 
-  useEffect(() => {
-    if (orders.length === 0) return;
-
-    const earliestOrderTime = Math.min(
-      ...orders.map((order) => new Date(order.createdAt).getTime())
-    );
-
-    const timer = setInterval(async () => {
-      const currentTime = new Date().getTime();
-      const cancellationTime = earliestOrderTime + 15 * 60 * 1000; // 15 minutes in milliseconds
-      if (currentTime >= cancellationTime) {
-        const updatedData = await Promise.all(
-          orders.map(async (order) => {
-            if (order.status === "Chưa Thanh Toán") {
-              const createdAtTime = new Date(order.createdAt).getTime();
-              const fifteenMinutesLater = createdAtTime + 15 * 60 * 1000; // 15 minutes in milliseconds
-              if (currentTime >= fifteenMinutesLater) {
-                // Apply the cancellation logic for the order
-                // await updateStatusCancel(order.id, "Đã Hủy");
-                console.log(order)
-                return {
-                  ...order,
-                  status: "Đã Hủy",
-                };
-              }
-            }
-            return order;
-          })
-        );
-console.log(updatedData)
-        // setData(updatedData); // Update the data state with modified order statuses
+  const checkCancellation = () => {
+    const currentTime = new Date().getTime();
+    const updatedData = orders.map((order) => {
+      if (order.status === "Chưa Thanh Toán") {
+        const createdAtTime = new Date(order.createdAt).getTime();
+        const fifteenMinutesLater = createdAtTime + 15 * 60 * 1000; // 15 minutes in milliseconds
+        if (currentTime >= fifteenMinutesLater) {
+          console.log("Order ID:", order.id, "is cancelled.");
+        }
       }
-    }, 5000); // 1 minute (you can adjust the interval as per your requirement)
+      return order;
+    });
+    console.log(updatedData);
+  };
 
-    return () => {
-      clearInterval(timer);
-    };
-  }, [orders]);
+  // useEffect(() => {
+  //   if (orders.length === 0) return;
+
+  //   const earliestOrderTime = Math.min(
+  //     ...orders.map((order) => new Date(order.createdAt).getTime())
+  //   );
+
+  //   checkCancellation();
+
+  //   timerRef.current = setInterval(checkCancellation, 5000);
+
+  //   return () => {
+  //     clearInterval(timerRef.current);
+  //   };
+  // }, [orders]);
 
   // const onChange = (pagination, filters, sorter, extra) => {
   //   console.log("params", pagination, filters, sorter, extra);
