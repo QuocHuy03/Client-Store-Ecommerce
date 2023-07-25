@@ -105,10 +105,10 @@ const FilterPage = () => {
   }, []);
 
   useEffect(() => {
-    const hasFilters = Object.values(filters).some(
-      (value) => Array.isArray(value) ? value.length > 0 : value !== ""
+    const hasFilters = Object.values(filters).some((value) =>
+      Array.isArray(value) ? value.length > 0 : value !== ""
     );
-  
+
     const query = Object.entries(filters)
       .map(([key, value]) => {
         if (Array.isArray(value)) {
@@ -123,13 +123,12 @@ const FilterPage = () => {
       })
       .filter((item) => item !== null)
       .join("&");
-  
-    const currentPath = window.location.pathname; // Get the current path
-    const newUrl = hasFilters ? `${currentPath}?${query}` : currentPath; // Build the new URL
-  
-    window.history.replaceState({}, "", newUrl); // Update the URL without refreshing the page
+
+    const currentPath = window.location.pathname;
+    const newUrl = hasFilters ? `${currentPath}?${query}` : currentPath;
+
+    window.history.replaceState({}, "", newUrl);
   }, [filters]);
-  
 
   const handleFilterChange = (group, value) => {
     if (value === filters[group]) {
@@ -149,7 +148,7 @@ const FilterPage = () => {
   let filteredData = dataProducts;
   if (dataProducts && dataProducts.length > 0) {
     filteredData = dataProducts.filter((huydev) => {
-      if (filters.categories && filters.categories !== huydev.nameCategory) {
+      if (filters.categories && filters.categories !== huydev?.nameCategory.toLowerCase()) {
         return false;
       }
       if (filters.colors) {
@@ -181,6 +180,7 @@ const FilterPage = () => {
 
       return true;
     });
+    console.log(filteredData);
   }
 
   return (
