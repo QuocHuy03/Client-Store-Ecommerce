@@ -92,10 +92,23 @@ const FilterPage = () => {
   const [filters, setFilters] = useState(initialFilters);
 
   useEffect(() => {
-    const hasFilters = Object.values(filters).some((value) =>
-      Array.isArray(value) ? value.length > 0 : value !== ""
-    );
+    const params = new URLSearchParams(window.location.search);
+    const queryCategories = params.get("categories");
+    const queryColors = params.get("colors");
+    const queryPrices = params.get("prices");
 
+    setFilters({
+      categories: queryCategories || "",
+      colors: queryColors || "",
+      prices: queryPrices || "",
+    });
+  }, []);
+
+  useEffect(() => {
+    const hasFilters = Object.values(filters).some(
+      (value) => Array.isArray(value) ? value.length > 0 : value !== ""
+    );
+  
     const query = Object.entries(filters)
       .map(([key, value]) => {
         if (Array.isArray(value)) {
@@ -110,16 +123,27 @@ const FilterPage = () => {
       })
       .filter((item) => item !== null)
       .join("&");
-
-    const newUrl = hasFilters ? `?${query}` : "";
-    window.history.replaceState({}, "", newUrl);
+  
+    const currentPath = window.location.pathname; // Get the current path
+    const newUrl = hasFilters ? `${currentPath}?${query}` : currentPath; // Build the new URL
+  
+    window.history.replaceState({}, "", newUrl); // Update the URL without refreshing the page
   }, [filters]);
+  
 
   const handleFilterChange = (group, value) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [group]: value,
-    }));
+    if (value === filters[group]) {
+      setFilters((prevFilters) => {
+        const updatedFilters = { ...prevFilters };
+        delete updatedFilters[group];
+        return updatedFilters;
+      });
+    } else {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [group]: value,
+      }));
+    }
   };
 
   let filteredData = dataProducts;
@@ -158,34 +182,6 @@ const FilterPage = () => {
       return true;
     });
   }
-
-  const getSelectedCategoryName = () => {
-    const selectedCategoryId = filters.categories || "";
-    if (!selectedCategoryId) return "";
-    const selectedCategory = dataCategories.find(
-      (category) => category.slugCategory === selectedCategoryId
-    );
-    return selectedCategory ? selectedCategory.nameCategory : "Tất cả";
-  };
-
-  const getSelectedColors = () => {
-    const selectedColorIds = filters.colors || "";
-    if (!selectedColorIds) return "";
-    const selectedColors = dataColors.find(
-      (color) => color.name === selectedColorIds
-    );
-    return selectedColors ? selectedColors.name : "Tất cả";
-  };
-
-  // const getSelectedPriceRange = () => {
-  //   const selectedPriceId = filters.prices || "";
-  //   console.log(selectedPriceId)
-  //   if (!selectedPriceId) return "";
-  //   const selectedPrice = dataPrice.find(
-  //     (price) => price.text === selectedPriceId
-  //   );
-  //   return selectedPrice ? selectedPrice.text : "Tất cả";
-  // };
 
   return (
     <Layout>
@@ -247,7 +243,7 @@ const FilterPage = () => {
                               <div
                                 type="caption"
                                 color="textPrimary"
-                                className="css-12zpvgl"
+                                className="css-12zpvgl capitalize"
                               >
                                 {`${value}`}
                               </div>
@@ -293,6 +289,7 @@ const FilterPage = () => {
                             handleFilterChange("categories", item.slugCategory)
                           }
                           id={`checker_category${item.id}`}
+                          checked={filters.categories === item.slugCategory}
                           type="radio"
                           name="category"
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
@@ -318,6 +315,7 @@ const FilterPage = () => {
                           onChange={() =>
                             handleFilterChange("colors", item.name)
                           }
+                          checked={filters.colors === item.name}
                           type="radio"
                           name="color"
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
@@ -343,6 +341,7 @@ const FilterPage = () => {
                             handleFilterChange("prices", item.price)
                           }
                           id={`checker_price${item.id}`}
+                          checked={filters.prices === item.price}
                           type="radio"
                           name="price"
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
