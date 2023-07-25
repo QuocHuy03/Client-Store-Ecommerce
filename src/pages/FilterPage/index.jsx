@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import Layout from "../../components/libs/Layout";
 import { fetchAllCategories } from "../../utils/api/categoriesApi";
-import { Router, useLocation, useNavigate, useParams } from "react-router-dom";
+import { fetchAllProducts } from "../../utils/api/productsApi";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const FilterPage = () => {
   const { slug } = useParams();
-  const location = useLocation();
-  const { data: dataCategories, isLoading } = useQuery(
+  const { data: dataCategories, isLoading: loadingCategories } = useQuery(
     ["categories"],
     () => fetchAllCategories(),
     {
@@ -15,6 +15,13 @@ const FilterPage = () => {
     }
   );
 
+  const { data: dataProducts, isLoading: loadingProducts } = useQuery(
+    ["products"],
+    () => fetchAllProducts(),
+    {
+      staleTime: 1000,
+    }
+  );
   const dataColors = [
     {
       id: 1,
@@ -74,12 +81,13 @@ const FilterPage = () => {
   ];
 
   const initialFilters = {
-    categories: [],
+    categories: "",
     colors: "",
     prices: "",
   };
 
   const [filters, setFilters] = useState(initialFilters);
+
   useEffect(() => {
     const hasFilters = Object.values(filters).some((value) =>
       Array.isArray(value) ? value.length > 0 : value !== ""
@@ -88,9 +96,12 @@ const FilterPage = () => {
     const query = Object.entries(filters)
       .map(([key, value]) => {
         if (Array.isArray(value)) {
-          return value
-            .map((item) => `${key}=${encodeURIComponent(item)}`)
-            .join("&");
+          // For array filters (e.g., categories), check if the array has any selected values.
+          // If yes, only take the first selected value (since radio buttons can only have one selection).
+          if (value.length > 0) {
+            return `${key}=${encodeURIComponent(value[0])}`;
+          }
+          return null;
         } else if (value !== "") {
           return `${key}=${encodeURIComponent(value)}`;
         }
@@ -104,24 +115,37 @@ const FilterPage = () => {
   }, [filters]);
 
   const handleFilterChange = (group, value) => {
-    setFilters((prevFilters) => {
-      if (group === "prices") {
-        // Handle radio buttons for prices (only one can be selected)
-        return {
-          ...prevFilters,
-          [group]: value,
-        };
-      } else {
-        // Handle checkboxes for categories and colors (multiple can be selected)
-        return {
-          ...prevFilters,
-          [group]: prevFilters[group].includes(value)
-            ? prevFilters[group].filter((item) => item !== value)
-            : [...prevFilters[group], value],
-        };
-      }
-    });
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [group]: value,
+    }));
   };
+
+  // let filteredData = data;
+  // if (data && data.length > 0) {
+  //   filteredData = data.filter((job) => {
+  //     if (filters.jobType && filters.jobType !== job.type_job) {
+  //       return false;
+  //     }
+  //     if (filters.jobRoles && filters.jobRoles !== job.level) {
+  //       return false;
+  //     }
+  //     if (filters.salaryRange) {
+  //       const [minSalary, maxSalary] = filters.salaryRange.split("-");
+  //       const jobSalary = parseInt(job.salary);
+  //       if (minSalary && jobSalary < parseInt(minSalary)) {
+  //         return false;
+  //       }
+  //       if (maxSalary && jobSalary > parseInt(maxSalary)) {
+  //         return false;
+  //       }
+  //     }
+  //     if (filters.location && filters.location !== job.location_job) {
+  //       return false;
+  //     }
+  //     return true;
+  //   });
+  // }
 
   return (
     <Layout>
@@ -175,14 +199,11 @@ const FilterPage = () => {
                       <div className="flex items-center" key={index}>
                         <input
                           onChange={() =>
-                            handleFilterChange("categories", [
-                              ...filters.categories,
-                              item.slugCategory,
-                            ])
+                            handleFilterChange("categories", item.slugCategory)
                           }
                           id={`checker_category${item.id}`}
-                          type="checkbox"
-                          defaultValue
+                          type="radio"
+                          name="category"
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         />
                         <label
@@ -204,13 +225,10 @@ const FilterPage = () => {
                         <input
                           id={`checker_color${item.id}`}
                           onChange={() =>
-                            handleFilterChange("colors", [
-                              ...filters.colors,
-                              item.name,
-                            ])
+                            handleFilterChange("colors", item.name)
                           }
-                          type="checkbox"
-                          defaultValue
+                          type="radio"
+                          name="color"
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         />
                         <label
@@ -236,7 +254,8 @@ const FilterPage = () => {
                           }
                           id={`checker_price${item.id}`}
                           type="radio"
-                          checked={filters.prices === item.price}
+                          name="price"
+                          // checked={filters.prices === item.price}
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
                         />
                         <label
