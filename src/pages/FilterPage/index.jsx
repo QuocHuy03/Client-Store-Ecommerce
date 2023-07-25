@@ -4,6 +4,7 @@ import { fetchAllCategories } from "../../utils/api/categoriesApi";
 import { fetchAllProducts } from "../../utils/api/productsApi";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import "./style.css";
 
 const FilterPage = () => {
   const { slug } = useParams();
@@ -40,42 +41,42 @@ const FilterPage = () => {
   const dataPrice = [
     {
       id: 1,
-      price: "< 5",
+      price: "<5",
       text: "Dưới 5 Triệu",
     },
     {
       id: 2,
-      price: "5 - 7",
+      price: "5-7",
       text: "Từ 5 - 7 Triệu",
     },
     {
       id: 3,
-      price: "7 - 10",
+      price: "7-10",
       text: "Từ 7 - 10 Triệu",
     },
     {
       id: 4,
-      price: "10 - 15",
+      price: "10-15",
       text: "Từ 10 - 15 Triệu",
     },
     {
       id: 5,
-      price: "15 - 20",
+      price: "15-20",
       text: "Từ 15 - 20 Triệu",
     },
     {
       id: 6,
-      price: "20 - 25",
+      price: "20-25",
       text: "Từ 20 - 25 Triệu",
     },
     {
       id: 7,
-      price: "25 - 30",
+      price: "25-30",
       text: "Từ 25 - 30 Triệu",
     },
     {
       id: 8,
-      price: "> 30",
+      price: ">30",
       text: "Trên 30 Triệu",
     },
   ];
@@ -118,30 +119,39 @@ const FilterPage = () => {
       [group]: value,
     }));
   };
-
   let filteredData = dataProducts;
   if (dataProducts && dataProducts.length > 0) {
     filteredData = dataProducts.filter((huydev) => {
-      console.log(huydev);
       if (filters.categories && filters.categories !== huydev.nameCategory) {
         return false;
       }
-      if (filters.prices && filters.jobRoles !== huydev.level) {
-        return false;
-      }
-      if (filters.salaryRange) {
-        const [minSalary, maxSalary] = filters.salaryRange.split("-");
-        const jobSalary = parseInt(huydev.salary);
-        if (minSalary && jobSalary < parseInt(minSalary)) {
+      if (filters.colors) {
+        const selectedColors = filters.colors
+          .split(",")
+          .map((color) => color.trim());
+        const productColors = huydev.nameColors
+          .split(",")
+          .map((color) => color.trim());
+
+        const hasMatchingColor = selectedColors.some((selectedColor) =>
+          productColors.includes(selectedColor)
+        );
+
+        if (!hasMatchingColor) {
           return false;
         }
-        if (maxSalary && jobSalary > parseInt(maxSalary)) {
+      }
+      if (filters.prices) {
+        const [minSalary, maxSalary] = filters.prices.split("-");
+        const priceProduct = parseInt(huydev.price_has_ropped);
+        if (minSalary && priceProduct < parseInt(minSalary)) {
+          return false;
+        }
+        if (maxSalary && priceProduct > parseInt(maxSalary)) {
           return false;
         }
       }
-      if (filters.location && filters.location !== job.location_job) {
-        return false;
-      }
+
       return true;
     });
   }
@@ -191,6 +201,47 @@ const FilterPage = () => {
               />
               <div className="hidden lg:block">
                 <div className="mb-6">
+                  <h3 className="text-lg font-semibold">Bộ Lọc</h3>
+                  <hr className="my-4" />
+                  <div className="flex flex-wrap gap-3">
+                    <div className="css-re27eh">
+                      <span
+                        className="css-cbubas"
+                        style={{ cursor: "pointer" }}
+                      >
+                        <div
+                          type="caption"
+                          color="textPrimary"
+                          className="css-12zpvgl"
+                        >
+                          ACER
+                        </div>
+                        <svg
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          size={16}
+                          className="css-9w5ue6"
+                          height={16}
+                          width={16}
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <path
+                            d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                            fill="#DFDFE6"
+                          />
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M9.90045 8.64594C9.60755 8.35305 9.13268 8.35305 8.83979 8.64594C8.54689 8.93883 8.54689 9.41371 8.83979 9.7066L11.0765 11.9433L8.83997 14.1798C8.54707 14.4727 8.54707 14.9476 8.83997 15.2405C9.13286 15.5334 9.60773 15.5334 9.90063 15.2405L12.1371 13.004L14.3737 15.2405C14.6666 15.5334 15.1414 15.5334 15.4343 15.2405C15.7272 14.9476 15.7272 14.4727 15.4343 14.1798L13.1978 11.9433L15.4345 9.7066C15.7274 9.41371 15.7274 8.93883 15.4345 8.64594C15.1416 8.35305 14.6667 8.35305 14.3738 8.64594L12.1371 10.8826L9.90045 8.64594Z"
+                            fill="white"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="mb-6">
                   <h3 className="text-lg font-semibold">Thương Hiệu</h3>
                   <hr className="my-4" />
                   <div className="flex flex-wrap gap-3">
@@ -203,7 +254,7 @@ const FilterPage = () => {
                           id={`checker_category${item.id}`}
                           type="radio"
                           name="category"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
                         />
                         <label
                           htmlFor={`checker_category${item.id}`}
@@ -228,7 +279,7 @@ const FilterPage = () => {
                           }
                           type="radio"
                           name="color"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
                         />
                         <label
                           htmlFor={`checker_color${item.id}`}
@@ -254,7 +305,6 @@ const FilterPage = () => {
                           id={`checker_price${item.id}`}
                           type="radio"
                           name="price"
-                          // checked={filters.prices === item.price}
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
                         />
                         <label
