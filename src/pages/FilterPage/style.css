@@ -7,8 +7,6 @@
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  gap: 0.25rem;
-  margin-bottom: 0.5rem;
 }
 
 .css-cbubas {
@@ -44,4 +42,29 @@
   max-width: unset;
   min-width: unset;
   transition: color 0.3s ease 0s;
+}
+.css-1uz4n2s.teko-row-baseline {
+    -webkit-box-align: baseline;
+    align-items: baseline;
+}
+
+.css-1uz4n2s.teko-row-start {
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+}
+
+.css-1uz4n2s.teko-row {
+    display: flex;
+    flex-flow: wrap;
+}
+
+.css-1uz4n2s {
+    border-style: none;
+    border-radius: 0.5rem;
+    border-width: 1px;
+    border-color: unset;
+    opacity: 1;
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 0.25rem;
+    padding: 0.75rem 1rem;
 }
