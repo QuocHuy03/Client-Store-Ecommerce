@@ -4,6 +4,7 @@ import { fetchAllCategories } from "../../utils/api/categoriesApi";
 import { fetchAllProducts } from "../../utils/api/productsApi";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Empty } from "antd";
 import "./style.css";
 
 const FilterPage = () => {
@@ -23,6 +24,7 @@ const FilterPage = () => {
       staleTime: 1000,
     }
   );
+
   const dataColors = [
     {
       id: 1,
@@ -119,6 +121,7 @@ const FilterPage = () => {
       [group]: value,
     }));
   };
+
   let filteredData = dataProducts;
   if (dataProducts && dataProducts.length > 0) {
     filteredData = dataProducts.filter((huydev) => {
@@ -155,6 +158,34 @@ const FilterPage = () => {
       return true;
     });
   }
+
+  const getSelectedCategoryName = () => {
+    const selectedCategoryId = filters.categories || "";
+    if (!selectedCategoryId) return "";
+    const selectedCategory = dataCategories.find(
+      (category) => category.slugCategory === selectedCategoryId
+    );
+    return selectedCategory ? selectedCategory.nameCategory : "Tất cả";
+  };
+
+  const getSelectedColors = () => {
+    const selectedColorIds = filters.colors || "";
+    if (!selectedColorIds) return "";
+    const selectedColors = dataColors.find(
+      (color) => color.name === selectedColorIds
+    );
+    return selectedColors ? selectedColors.name : "Tất cả";
+  };
+
+  // const getSelectedPriceRange = () => {
+  //   const selectedPriceId = filters.prices || "";
+  //   console.log(selectedPriceId)
+  //   if (!selectedPriceId) return "";
+  //   const selectedPrice = dataPrice.find(
+  //     (price) => price.text === selectedPriceId
+  //   );
+  //   return selectedPrice ? selectedPrice.text : "Tất cả";
+  // };
 
   return (
     <Layout>
@@ -203,42 +234,52 @@ const FilterPage = () => {
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold">Bộ Lọc</h3>
                   <hr className="my-4" />
+                  {/* {filters} */}
                   <div className="flex flex-wrap gap-3">
-                    <div className="css-re27eh">
-                      <span
-                        className="css-cbubas"
-                        style={{ cursor: "pointer" }}
-                      >
-                        <div
-                          type="caption"
-                          color="textPrimary"
-                          className="css-12zpvgl"
-                        >
-                          ACER
-                        </div>
-                        <svg
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          size={16}
-                          className="css-9w5ue6"
-                          height={16}
-                          width={16}
-                          xmlns="http://www.w3.org/2000/svg"
-                          style={{ cursor: "pointer" }}
-                        >
-                          <path
-                            d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
-                            fill="#DFDFE6"
-                          />
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M9.90045 8.64594C9.60755 8.35305 9.13268 8.35305 8.83979 8.64594C8.54689 8.93883 8.54689 9.41371 8.83979 9.7066L11.0765 11.9433L8.83997 14.1798C8.54707 14.4727 8.54707 14.9476 8.83997 15.2405C9.13286 15.5334 9.60773 15.5334 9.90063 15.2405L12.1371 13.004L14.3737 15.2405C14.6666 15.5334 15.1414 15.5334 15.4343 15.2405C15.7272 14.9476 15.7272 14.4727 15.4343 14.1798L13.1978 11.9433L15.4345 9.7066C15.7274 9.41371 15.7274 8.93883 15.4345 8.64594C15.1416 8.35305 14.6667 8.35305 14.3738 8.64594L12.1371 10.8826L9.90045 8.64594Z"
-                            fill="white"
-                          />
-                        </svg>
-                      </span>
-                    </div>
+                    {Object.entries(filters).some(([key, value]) => value) ? (
+                      Object.entries(filters).map(([key, value]) =>
+                        value ? (
+                          <div className="css-re27eh" key={key}>
+                            <span
+                              className="css-cbubas"
+                              style={{ cursor: "pointer" }}
+                            >
+                              <div
+                                type="caption"
+                                color="textPrimary"
+                                className="css-12zpvgl"
+                              >
+                                {`${value}`}
+                              </div>
+                              <svg
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                size={16}
+                                className="css-9w5ue6"
+                                height={16}
+                                width={16}
+                                xmlns="http://www.w3.org/2000/svg"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => handleFilterChange(key, "")}
+                              >
+                                <path
+                                  d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                                  fill="#DFDFE6"
+                                />
+                                <path
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
+                                  d="M9.90045 8.64594C9.60755 8.35305 9.13268 8.35305 8.83979 8.64594C8.54689 8.93883 8.54689 9.41371 8.83979 9.7066L11.0765 11.9433L8.83997 14.1798C8.54707 14.4727 8.54707 14.9476 8.83997 15.2405C9.13286 15.5334 9.60773 15.5334 9.90063 15.2405L12.1371 13.004L14.3737 15.2405C14.6666 15.5334 15.1414 15.5334 15.4343 15.2405C15.7272 14.9476 15.7272 14.4727 15.4343 14.1798L13.1978 11.9433L15.4345 9.7066C15.7274 9.41371 15.7274 8.93883 15.4345 8.64594C15.1416 8.35305 14.6667 8.35305 14.3738 8.64594L12.1371 10.8826L9.90045 8.64594Z"
+                                  fill="white"
+                                />
+                              </svg>
+                            </span>
+                          </div>
+                        ) : null
+                      )
+                    ) : (
+                      <Empty />
+                    )}
                   </div>
                 </div>
                 <div className="mb-6">
@@ -291,7 +332,6 @@ const FilterPage = () => {
                     ))}
                   </div>
                 </div>
-
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold">Mức Giá</h3>
                   <hr className="my-4" />
