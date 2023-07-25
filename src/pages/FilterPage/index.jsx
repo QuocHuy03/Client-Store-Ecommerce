@@ -409,8 +409,8 @@ const FilterPage = () => {
                   </div>
                 </div>
                 <div className="lg:grid">
-                  <div className="mt-6 lg:col-span-5">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="mt-6 lg:col-span-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
                       {filteredData?.length === 0 ? (
                         <div className="c1i59 c0wh8 c6sts cljpo text-center px-5">
                           <h3 className="text-red-700 text-center font-bold">
@@ -420,10 +420,10 @@ const FilterPage = () => {
                       ) : (
                         filteredData?.map((item) => (
                           <div
-                            className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4"
+                            className="bg-white group cursor-pointer border p-3 space-y-4"
                             key={item.id}
                           >
-                            <div className="aspect-square rounded-xl bg-gray-100 relative">
+                            <div className="aspect-square relative">
                               <img
                                 alt="Image"
                                 loading="lazy"
@@ -431,8 +431,11 @@ const FilterPage = () => {
                                 data-nimg="fill"
                                 className="aspect-square object-cover rounded-md"
                                 sizes="100vw"
-                                srcSet="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689067600%2Fmdrvtga6qgcghgw59idx.webp&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689067600%2Fmdrvtga6qgcghgw59idx.webp&w=750&q=75 750w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689067600%2Fmdrvtga6qgcghgw59idx.webp&w=828&q=75 828w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689067600%2Fmdrvtga6qgcghgw59idx.webp&w=1080&q=75 1080w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689067600%2Fmdrvtga6qgcghgw59idx.webp&w=1200&q=75 1200w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689067600%2Fmdrvtga6qgcghgw59idx.webp&w=1920&q=75 1920w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689067600%2Fmdrvtga6qgcghgw59idx.webp&w=2048&q=75 2048w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689067600%2Fmdrvtga6qgcghgw59idx.webp&w=3840&q=75 3840w"
-                                src="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689067600%2Fmdrvtga6qgcghgw59idx.webp&w=3840&q=75"
+                                srcSet={
+                                  item.imagePaths
+                                    ? item.imagePaths.split(",")[0]
+                                    : null
+                                }
                                 style={{
                                   position: "absolute",
                                   height: "100%",
@@ -484,16 +487,29 @@ const FilterPage = () => {
                               </div>
                             </div>
                             <div>
-                              <p className="font-semibold text-lg">
+                              <p className="font-semibold text-sm">
                                 {item.nameProduct}
                               </p>
-                              <p className="text-sm text-gray-500">
-                                {item.nameCategory}
-                              </p>
+                              <div className="flex items-center justify-between">
+                                <p className=" text-gray-500 text-xs">
+                                  {item.nameCategory}
+                                </p>
+                                <p className="text-xs font-semibold uppercase text-green-400">
+                                  {item.statusProduct}
+                                </p>
+                              </div>
                             </div>
-                            <div className="flex items-center justify-between">
-                              <div className="font-semibold">
-                                3.500.000&nbsp;₫
+                            <div className="flex items-center gap-2">
+                              <div className="text-sm font-semibold text-blue-700">
+                                {item.initial_price.toLocaleString()}đ
+                              </div>
+                              <div
+                                className="text-xs"
+                                style={{
+                                  textDecoration: "line-through",
+                                }}
+                              >
+                                {item.price_has_ropped.toLocaleString()}đ
                               </div>
                             </div>
                           </div>
