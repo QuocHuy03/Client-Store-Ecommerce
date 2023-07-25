@@ -44,27 +44,111 @@
   transition: color 0.3s ease 0s;
 }
 .css-1uz4n2s.teko-row-baseline {
-    -webkit-box-align: baseline;
-    align-items: baseline;
+  -webkit-box-align: baseline;
+  align-items: baseline;
 }
 
 .css-1uz4n2s.teko-row-start {
-    -webkit-box-pack: start;
-    justify-content: flex-start;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
 }
 
 .css-1uz4n2s.teko-row {
-    display: flex;
-    flex-flow: wrap;
+  display: flex;
+  flex-flow: wrap;
 }
 
 .css-1uz4n2s {
-    border-style: none;
-    border-radius: 0.5rem;
-    border-width: 1px;
-    border-color: unset;
-    opacity: 1;
-    background-color: rgb(255, 255, 255);
-    margin-bottom: 0.25rem;
-    padding: 0.75rem 1rem;
+  border-style: none;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: unset;
+  opacity: 1;
+  background-color: rgb(255, 255, 255);
+  margin-bottom: 0.25rem;
+  padding: 0.75rem 0rem;
+}
+
+.css-129dmtm {
+  border-style: none none solid;
+  border-width: 1px;
+  border-top-color: unset;
+  border-right-color: unset;
+  border-left-color: unset;
+  opacity: 1;
+  display: flex;
+  flex-flow: row;
+  gap: 0rem;
+  -webkit-box-align: baseline;
+  align-items: baseline;
+  border-bottom-color: rgb(234, 234, 234);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.css-d1ctgk {
+  border-style: none;
+  border-width: 1px;
+  border-color: unset;
+  opacity: 1;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+}
+
+.css-ghn8qk {
+  margin: 0px 2rem 0px 0px;
+  padding: 0px;
+  border-style: none;
+  border-width: 1px;
+  border-color: unset;
+  opacity: 1;
+  color: inherit;
+  font-weight: 500;
+  text-decoration: unset;
+  font-size: 13px;
+  line-height: 24px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: unset;
+  max-width: unset;
+  min-width: unset;
+  transition: color 0.3s ease 0s;
+}
+
+.css-1w3mv8m {
+  border-radius: 4px;
+  display: inline-block;
+  user-select: none;
+  border: 1px solid rgb(224, 224, 224);
+  background-color: rgb(255, 255, 255);
+  padding: 0.5rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.css-2knkn8 {
+  margin: 0px;
+  padding: 0px;
+  border-style: none;
+  border-width: 1px;
+  border-color: unset;
+  opacity: 1;
+  color: inherit;
+  font-weight: 400;
+  text-decoration: unset;
+  font-size: 13px;
+  line-height: 20px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: unset;
+  max-width: unset;
+  min-width: unset;
+  transition: color 0.3s ease 0s;
 }

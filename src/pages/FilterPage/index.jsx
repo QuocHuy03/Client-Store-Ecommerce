@@ -375,8 +375,41 @@ const FilterPage = () => {
                     ({filteredData ? filteredData?.length : 0} sản phẩm)
                   </div>
                 </div>
+
+                <div className="css-129dmtm pb-5">
+                  <div className="css-d1ctgk flex items-center flex-wrap gap-2">
+                    <div type="subtitle" className="css-ghn8qk">
+                      Sắp xếp theo
+                    </div>
+                    <div className="css-1w3mv8m">
+                      <div type="body" className="css-2knkn8">
+                        Khuyến mãi tốt nhất
+                      </div>
+                    </div>
+                    <div className="css-1w3mv8m">
+                      <div type="body" className="css-2knkn8">
+                        Giá tăng dần
+                      </div>
+                    </div>
+                    <div className="css-1w3mv8m">
+                      <div type="body" className="css-2knkn8">
+                        Giá giảm dần
+                      </div>
+                    </div>
+                    <div className="css-1w3mv8m">
+                      <div type="body" className="css-2knkn8">
+                        Sản phẩm mới nhất
+                      </div>
+                    </div>
+                    <div className="css-1w3mv8m">
+                      <div type="body" className="css-2knkn8">
+                        Sản phẩm bán chạy nhất
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div className="lg:grid">
-                  <div className="mt-6 lg:col-span-5 lg:mt-0">
+                  <div className="mt-6 lg:col-span-5">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                       {filteredData?.length === 0 ? (
                         <div className="c1i59 c0wh8 c6sts cljpo text-center px-5">
