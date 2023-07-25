@@ -377,9 +377,9 @@ const FilterPage = () => {
                 </div>
 
                 <div className="css-129dmtm pb-5">
-                  <div className="css-d1ctgk flex items-center flex-wrap gap-2">
+                  <div className="css-d1ctgk flex items-center flex-wrap gap-2 capitalize">
                     <div type="subtitle" className="css-ghn8qk">
-                      Sắp xếp theo
+                      Sắp Xếp Theo
                     </div>
                     <div className="css-1w3mv8m">
                       <div type="body" className="css-2knkn8">
