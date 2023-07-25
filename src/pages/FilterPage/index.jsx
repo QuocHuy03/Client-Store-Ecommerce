@@ -43,42 +43,42 @@ const FilterPage = () => {
   const dataPrice = [
     {
       id: 1,
-      price: "<5",
+      price: "0-5000000",
       text: "Dưới 5 Triệu",
     },
     {
       id: 2,
-      price: "5-7",
+      price: "5000000-7000000",
       text: "Từ 5 - 7 Triệu",
     },
     {
       id: 3,
-      price: "7-10",
+      price: "7000000-10000000",
       text: "Từ 7 - 10 Triệu",
     },
     {
       id: 4,
-      price: "10-15",
+      price: "10000000-15000000",
       text: "Từ 10 - 15 Triệu",
     },
     {
       id: 5,
-      price: "15-20",
+      price: "15000000-20000000",
       text: "Từ 15 - 20 Triệu",
     },
     {
       id: 6,
-      price: "20-25",
+      price: "20000000-25000000",
       text: "Từ 20 - 25 Triệu",
     },
     {
       id: 7,
-      price: "25-30",
+      price: "25000000-30000000",
       text: "Từ 25 - 30 Triệu",
     },
     {
       id: 8,
-      price: ">30",
+      price: "30000000-125000000",
       text: "Trên 30 Triệu",
     },
   ];
@@ -148,7 +148,10 @@ const FilterPage = () => {
   let filteredData = dataProducts;
   if (dataProducts && dataProducts.length > 0) {
     filteredData = dataProducts.filter((huydev) => {
-      if (filters.categories && filters.categories !== huydev?.nameCategory.toLowerCase()) {
+      if (
+        filters.categories &&
+        filters.categories !== huydev?.nameCategory.toLowerCase()
+      ) {
         return false;
       }
       if (filters.colors) {
@@ -177,10 +180,8 @@ const FilterPage = () => {
           return false;
         }
       }
-
       return true;
     });
-    console.log(filteredData);
   }
 
   return (
