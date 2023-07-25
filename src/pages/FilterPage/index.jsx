@@ -1,8 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import Layout from "../../components/libs/Layout";
 import { fetchAllCategories } from "../../utils/api/categoriesApi";
+import { Router, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const FilterPage = () => {
+  const { slug } = useParams();
+  const location = useLocation();
   const { data: dataCategories, isLoading } = useQuery(
     ["categories"],
     () => fetchAllCategories(),
@@ -58,16 +62,66 @@ const FilterPage = () => {
       text: "Từ 20 - 25 Triệu",
     },
     {
-      id: 6,
+      id: 7,
       price: "25 - 30",
       text: "Từ 25 - 30 Triệu",
     },
     {
-      id: 6,
+      id: 8,
       price: "> 30",
       text: "Trên 30 Triệu",
     },
   ];
+
+  const initialFilters = {
+    categories: [],
+    colors: "",
+    prices: "",
+  };
+
+  const [filters, setFilters] = useState(initialFilters);
+  useEffect(() => {
+    const hasFilters = Object.values(filters).some((value) =>
+      Array.isArray(value) ? value.length > 0 : value !== ""
+    );
+
+    const query = Object.entries(filters)
+      .map(([key, value]) => {
+        if (Array.isArray(value)) {
+          return value
+            .map((item) => `${key}=${encodeURIComponent(item)}`)
+            .join("&");
+        } else if (value !== "") {
+          return `${key}=${encodeURIComponent(value)}`;
+        }
+        return null;
+      })
+      .filter((item) => item !== null)
+      .join("&");
+
+    const newUrl = hasFilters ? `?${query}` : "";
+    window.history.replaceState({}, "", newUrl);
+  }, [filters]);
+
+  const handleFilterChange = (group, value) => {
+    setFilters((prevFilters) => {
+      if (group === "prices") {
+        // Handle radio buttons for prices (only one can be selected)
+        return {
+          ...prevFilters,
+          [group]: value,
+        };
+      } else {
+        // Handle checkboxes for categories and colors (multiple can be selected)
+        return {
+          ...prevFilters,
+          [group]: prevFilters[group].includes(value)
+            ? prevFilters[group].filter((item) => item !== value)
+            : [...prevFilters[group], value],
+        };
+      }
+    });
+  };
 
   return (
     <Layout>
@@ -117,9 +171,15 @@ const FilterPage = () => {
                   <h3 className="text-lg font-semibold">Thương Hiệu</h3>
                   <hr className="my-4" />
                   <div className="flex flex-wrap gap-3">
-                    {dataCategories?.map((item) => (
-                      <div className="flex items-center">
+                    {dataCategories?.map((item, index) => (
+                      <div className="flex items-center" key={index}>
                         <input
+                          onChange={() =>
+                            handleFilterChange("categories", [
+                              ...filters.categories,
+                              item.slugCategory,
+                            ])
+                          }
                           id={`checker_category${item.id}`}
                           type="checkbox"
                           defaultValue
@@ -139,10 +199,16 @@ const FilterPage = () => {
                   <h3 className="text-lg font-semibold">Màu Sắc</h3>
                   <hr className="my-4" />
                   <div className="flex flex-wrap gap-3">
-                    {dataColors?.map((item) => (
-                      <div className="flex items-center">
+                    {dataColors?.map((item, index) => (
+                      <div className="flex items-center" key={index}>
                         <input
                           id={`checker_color${item.id}`}
+                          onChange={() =>
+                            handleFilterChange("colors", [
+                              ...filters.colors,
+                              item.name,
+                            ])
+                          }
                           type="checkbox"
                           defaultValue
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -162,17 +228,20 @@ const FilterPage = () => {
                   <h3 className="text-lg font-semibold">Mức Giá</h3>
                   <hr className="my-4" />
                   <div className="flex flex-wrap gap-3">
-                    {dataPrice?.map((item) => (
-                      <div className="flex items-center">
+                    {dataPrice?.map((item, index) => (
+                      <div className="flex items-center" key={index}>
                         <input
+                          onChange={() =>
+                            handleFilterChange("prices", item.price)
+                          }
                           id={`checker_price${item.id}`}
-                          type="checkbox"
-                          defaultValue
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          type="radio"
+                          checked={filters.prices === item.price}
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
                         />
                         <label
                           htmlFor={`checker_price${item.id}`}
-                          className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 capitalize"
+                          className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                         >
                           {item.text}
                         </label>
