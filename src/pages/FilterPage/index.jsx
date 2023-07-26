@@ -223,14 +223,20 @@ const FilterPage = () => {
       dataProducts.sort((a, b) => {
         return a.price_has_ropped - b.price_has_ropped;
       });
-      console.log("Giá Tăng Dần");
     }
 
     if (item.sort === "SORT_BY_PRICE" && item.order === "DESC") {
       dataProducts.sort((a, b) => {
         return b.price_has_ropped - a.price_has_ropped;
       });
-      console.log("Giá Giảm Dần");
+    }
+
+    if (item.sort === "SORT_BY_PUBLISH_AT" && item.order === "DESC") {
+      dataProducts.sort((a, b) => {
+        const dateA = new Date(a.createAt).getTime();
+        const dateB = new Date(b.createAt).getTime();
+        return dateB - dateA;
+      });
     }
     setClickedItemId(item.id);
   };
