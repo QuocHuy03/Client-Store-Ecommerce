@@ -37,6 +37,10 @@ const FilterPage = () => {
       id: 3,
       name: "yellow",
     },
+    {
+      id: 4,
+      name: "white",
+    },
   ];
 
   const dataPrice = [
