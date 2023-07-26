@@ -1,13 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Layout from "../../components/libs/Layout";
 import { fetchAllCategories } from "../../utils/api/categoriesApi";
-import { fetchAllProducts } from "../../utils/api/productsApi";
+import { fetchAllProductPage } from "../../utils/api/productsApi";
 import { useEffect, useState } from "react";
-import { Empty } from "antd";
+import { Empty, Pagination } from "antd";
 import "./style.css";
 import { Link } from "react-router-dom";
 
 const FilterPage = () => {
+  const queryClient = useQueryClient();
   const { data: dataCategories, isLoading: loadingCategories } = useQuery(
     ["categories"],
     () => fetchAllCategories(),
@@ -16,13 +17,25 @@ const FilterPage = () => {
     }
   );
 
-  const { data: dataProducts, isLoading: loadingProducts } = useQuery(
-    ["products"],
-    () => fetchAllProducts(),
-    {
-      staleTime: 1000,
-    }
-  );
+  const [page, setPage] = useState(1);
+
+  const fetchProductPage = async (page) => {
+    const data = await fetchAllProductPage(page);
+    return data;
+  };
+
+  const {
+    data: dataProducts,
+    isLoading: loadingProducts,
+    refetch,
+  } = useQuery(["products", page], () => fetchProductPage(page), {
+    staleTime: 1000,
+  });
+
+  const handlePageChange = async (page) => {
+    setPage(page);
+    await refetch();
+  };
 
   const dataColors = [
     {
@@ -148,9 +161,9 @@ const FilterPage = () => {
     }
   };
 
-  let filteredData = dataProducts;
-  if (dataProducts && dataProducts.length > 0) {
-    filteredData = dataProducts.filter((huydev) => {
+  let filteredData = dataProducts?.data;
+  if (dataProducts?.data && dataProducts?.data.length > 0) {
+    filteredData = dataProducts?.data.filter((huydev) => {
       if (
         filters.categories &&
         filters.categories !== huydev?.nameCategory.toLowerCase()
@@ -218,26 +231,26 @@ const FilterPage = () => {
 
   const handleSortItem = (item) => {
     if (item.sort === "SORT_BY_DISCOUNT_PERCENT" && item.order === "DESC") {
-      // dataProducts.sort((a, b) => {
+      // dataProducts?.data.sort((a, b) => {
       //   console.log(a, b);
       //   return b.priceProduct - a.priceProduct;
       // });
       console.log("Khuyến Mãi Tốt Nhất");
     }
     if (item.sort === "SORT_BY_PRICE" && item.order === "ASC") {
-      dataProducts.sort((a, b) => {
+      dataProducts?.data.sort((a, b) => {
         return a.price_has_ropped - b.price_has_ropped;
       });
     }
 
     if (item.sort === "SORT_BY_PRICE" && item.order === "DESC") {
-      dataProducts.sort((a, b) => {
+      dataProducts?.data.sort((a, b) => {
         return b.price_has_ropped - a.price_has_ropped;
       });
     }
 
     if (item.sort === "SORT_BY_PUBLISH_AT" && item.order === "DESC") {
-      dataProducts.sort((a, b) => {
+      dataProducts?.data.sort((a, b) => {
         const dateA = new Date(a.createAt).getTime();
         const dateB = new Date(b.createAt).getTime();
         return dateB - dateA;
@@ -580,6 +593,14 @@ const FilterPage = () => {
                       </div>
                     )}
                   </div>
+                </div>
+                <div className="pt-5 flex justify-center">
+                  <Pagination
+                    current={dataProducts?.currentPage}
+                    total={dataProducts?.totalItems}
+                    pageSize={dataProducts?.itemsPerPage || 0}
+                    onChange={handlePageChange}
+                  />
                 </div>
               </div>
             </div>

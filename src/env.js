@@ -6,3 +6,5 @@ export const discount_code = {
   code: "HUYDEV",
   price: 500000,
 };
+
+export const PAGE_SIZE = 4;
