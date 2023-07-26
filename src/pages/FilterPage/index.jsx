@@ -2,13 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import Layout from "../../components/libs/Layout";
 import { fetchAllCategories } from "../../utils/api/categoriesApi";
 import { fetchAllProducts } from "../../utils/api/productsApi";
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Empty } from "antd";
 import "./style.css";
 
 const FilterPage = () => {
-  const { slug } = useParams();
   const { data: dataCategories, isLoading: loadingCategories } = useQuery(
     ["categories"],
     () => fetchAllCategories(),
@@ -183,6 +181,35 @@ const FilterPage = () => {
       return true;
     });
   }
+
+  const sort = [
+    {
+      id: 1,
+      name: "Khuyến mãi tốt nhất",
+    },
+    {
+      id: 2,
+      name: "Giá tăng dần",
+    },
+    {
+      id: 3,
+      name: "Giá giảm dần",
+    },
+    {
+      id: 4,
+      name: "Sản phẩm mới nhất",
+    },
+    {
+      id: 5,
+      name: "Sản phẩm bán chạy",
+    },
+  ];
+
+  const [clickedItemId, setClickedItemId] = useState(null);
+
+  const handleItemClick = (itemId) => {
+    setClickedItemId(itemId);
+  };
 
   return (
     <Layout>
@@ -381,31 +408,48 @@ const FilterPage = () => {
                     <div type="subtitle" className="css-ghn8qk">
                       Sắp Xếp Theo
                     </div>
-                    <div className="css-1w3mv8m">
-                      <div type="body" className="css-2knkn8">
-                        Khuyến mãi tốt nhất
+                    {sort?.map((item) => (
+                      <div
+                        className={`${
+                          clickedItemId === item.id
+                            ? "css-1ss9yju"
+                            : "css-1w3mv8m"
+                        }`}
+                        key={item.id}
+                        onClick={() => handleItemClick(item.id)}
+                      >
+                        <div type="body" className="css-2knkn8">
+                          {item.name}
+                        </div>
+                        {clickedItemId === item.id ? (
+                          <>
+                            <div className="css-u3jq8e" />
+                            <span className="css-mpv07g">
+                              <svg
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                size={14}
+                                className="css-1kpmq"
+                                color="#ffffff"
+                                height={14}
+                                width={14}
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M5 12.4545L9.375 17L19 7"
+                                  stroke="#82869E"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </span>
+                          </>
+                        ) : (
+                          ""
+                        )}
                       </div>
-                    </div>
-                    <div className="css-1w3mv8m">
-                      <div type="body" className="css-2knkn8">
-                        Giá tăng dần
-                      </div>
-                    </div>
-                    <div className="css-1w3mv8m">
-                      <div type="body" className="css-2knkn8">
-                        Giá giảm dần
-                      </div>
-                    </div>
-                    <div className="css-1w3mv8m">
-                      <div type="body" className="css-2knkn8">
-                        Sản phẩm mới nhất
-                      </div>
-                    </div>
-                    <div className="css-1w3mv8m">
-                      <div type="body" className="css-2knkn8">
-                        Sản phẩm bán chạy nhất
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
                 <div className="lg:grid">
