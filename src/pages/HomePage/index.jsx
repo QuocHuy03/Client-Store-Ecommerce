@@ -11,13 +11,16 @@ import { message } from "antd";
 import Loading from "../../components/Loading";
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isOpenModal, setIsOpenModal } = useContext(AppContext);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState(null);
   const [showColorError, setShowColorError] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+
+  const [displayedProductCount, setDisplayedProductCount] = useState(8);
+  const [isLoadingProduct, setIsLoading] = useState(false);
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -94,6 +97,13 @@ const HomePage = () => {
     setIsOpenModal(false);
   };
 
+  const handleLoadMore = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setDisplayedProductCount(displayedProductCount + 4);
+      setIsLoading(false);
+    }, 2000);
+  };
   return (
     <Layout>
       <div className="mx-auto max-w-7xl">
@@ -123,7 +133,7 @@ const HomePage = () => {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {/* products */}
-                  {data?.map((item) => (
+                  {data.slice(0, displayedProductCount)?.map((item) => (
                     <React.Fragment key={item.id}>
                       <div className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4">
                         <div className="aspect-square rounded-xl bg-gray-100 relative">
@@ -456,6 +466,17 @@ const HomePage = () => {
                     </React.Fragment>
                   ))}
                   {/* end products */}
+
+                  <div className="text-center pt-5">
+                    {displayedProductCount < data.length && (
+                      <button
+                        className="btn btn-danger"
+                        onClick={handleLoadMore}
+                      >
+                        {isLoading && <span>Loading...</span>} Load More
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
