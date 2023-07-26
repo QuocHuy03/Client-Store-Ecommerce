@@ -508,8 +508,18 @@ const DetailPage = () => {
                         <p className="font-semibold text-lg">THOM BROWNE</p>
                         <p className="text-sm text-gray-500">THOM BROWNE</p>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <div className="font-semibold">10.000.000&nbsp;₫</div>
+                      <div className="flex items-center gap-2">
+                        <div className="text-sm font-semibold text-blue-700">
+                          {item.price_has_ropped.toLocaleString()}đ
+                        </div>
+                        <div
+                          className="text-xs"
+                          style={{
+                            textDecoration: "line-through",
+                          }}
+                        >
+                          {item.initial_price.toLocaleString()}đ
+                        </div>
                       </div>
                     </div>
                   ))}

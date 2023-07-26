@@ -186,29 +186,53 @@ const FilterPage = () => {
     {
       id: 1,
       name: "Khuyến mãi tốt nhất",
+      sort: "SORT_BY_DISCOUNT_PERCENT",
+      order: "DESC",
     },
     {
       id: 2,
       name: "Giá tăng dần",
+      sort: "SORT_BY_PRICE",
+      order: "ASC",
     },
     {
       id: 3,
       name: "Giá giảm dần",
+      sort: "SORT_BY_PRICE",
+      order: "DESC",
     },
     {
       id: 4,
       name: "Sản phẩm mới nhất",
-    },
-    {
-      id: 5,
-      name: "Sản phẩm bán chạy",
+      sort: "SORT_BY_PUBLISH_AT",
+      order: "DESC",
     },
   ];
 
   const [clickedItemId, setClickedItemId] = useState(null);
 
-  const handleItemClick = (itemId) => {
-    setClickedItemId(itemId);
+  const handleSortItem = (item) => {
+    if (item.sort === "SORT_BY_DISCOUNT_PERCENT" && item.order === "DESC") {
+      // dataProducts.sort((a, b) => {
+      //   console.log(a, b);
+      //   return b.priceProduct - a.priceProduct;
+      // });
+      console.log("Khuyến Mãi Tốt Nhất");
+    }
+    if (item.sort === "SORT_BY_PRICE" && item.order === "ASC") {
+      dataProducts.sort((a, b) => {
+        return a.price_has_ropped - b.price_has_ropped;
+      });
+      console.log("Giá Tăng Dần");
+    }
+
+    if (item.sort === "SORT_BY_PRICE" && item.order === "DESC") {
+      dataProducts.sort((a, b) => {
+        return b.price_has_ropped - a.price_has_ropped;
+      });
+      console.log("Giá Giảm Dần");
+    }
+    setClickedItemId(item.id);
   };
 
   return (
@@ -416,7 +440,7 @@ const FilterPage = () => {
                             : "css-1w3mv8m"
                         }`}
                         key={item.id}
-                        onClick={() => handleItemClick(item.id)}
+                        onClick={() => handleSortItem(item)}
                       >
                         <div type="body" className="css-2knkn8">
                           {item.name}
@@ -545,7 +569,7 @@ const FilterPage = () => {
                             </div>
                             <div className="flex items-center gap-2">
                               <div className="text-sm font-semibold text-blue-700">
-                                {item.initial_price.toLocaleString()}đ
+                                {item.price_has_ropped.toLocaleString()}đ
                               </div>
                               <div
                                 className="text-xs"
@@ -553,7 +577,7 @@ const FilterPage = () => {
                                   textDecoration: "line-through",
                                 }}
                               >
-                                {item.price_has_ropped.toLocaleString()}đ
+                                {item.initial_price.toLocaleString()}đ
                               </div>
                             </div>
                           </div>

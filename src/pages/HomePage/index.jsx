@@ -213,7 +213,7 @@ const HomePage = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="text-sm font-semibold text-blue-700">
-                            {item.initial_price.toLocaleString()}đ
+                            {item.price_has_ropped.toLocaleString()}đ
                           </div>
                           <div
                             className="text-xs"
@@ -221,7 +221,7 @@ const HomePage = () => {
                               textDecoration: "line-through",
                             }}
                           >
-                            {item.price_has_ropped.toLocaleString()}đ
+                            {item.initial_price.toLocaleString()}đ
                           </div>
                         </div>
                       </div>
