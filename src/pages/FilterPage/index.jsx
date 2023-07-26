@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import Layout from "../../components/libs/Layout";
 import { fetchAllCategories } from "../../utils/api/categoriesApi";
 import { fetchAllProductPage } from "../../utils/api/productsApi";
@@ -8,7 +8,8 @@ import "./style.css";
 import { Link } from "react-router-dom";
 
 const FilterPage = () => {
-  const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
+
   const { data: dataCategories, isLoading: loadingCategories } = useQuery(
     ["categories"],
     () => fetchAllCategories(),
@@ -16,8 +17,6 @@ const FilterPage = () => {
       staleTime: 1000,
     }
   );
-
-  const [page, setPage] = useState(1);
 
   const fetchProductPage = async (page) => {
     const data = await fetchAllProductPage(page);
