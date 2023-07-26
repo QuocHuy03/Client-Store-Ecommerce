@@ -107,16 +107,16 @@ const Header = () => {
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdown-button"
                 >
-                  {data?.map((item) => (
-                    <li key={item.id}>
-                      <Link
-                        to={`/c/${item.slugCategory}`}
-                        className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        {item.nameCategory}
-                      </Link>
-                    </li>
-                  ))}
+                  {/* {data?.map((item) => (
+                    <li key={item.id}> */}
+                  <Link
+                    to={`/c/laptop`}
+                    className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    {/* {item.nameCategory} */}Laptop
+                  </Link>
+                  {/* </li>
+                  ))} */}
                 </ul>
               </div>
             )}

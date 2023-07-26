@@ -150,9 +150,9 @@ const CartPage = () => {
                       </li>
                     ))
                   ) : (
-                    <p className="text-center">
+                    <span className="text-center">
                       <Empty />
-                    </p>
+                    </span>
                   )}
                 </ul>
               </div>

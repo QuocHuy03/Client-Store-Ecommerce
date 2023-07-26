@@ -484,15 +484,15 @@ const FilterPage = () => {
                 </div>
                 <div className="lg:grid">
                   <div className="mt-6 lg:col-span-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
-                      {filteredData?.length === 0 ? (
-                        <div className="c1i59 c0wh8 c6sts cljpo text-center px-5">
-                          <h3 className="text-red-700 text-center font-bold">
-                            Empty data ...
-                          </h3>
-                        </div>
-                      ) : (
-                        filteredData?.map((item) => (
+                    {filteredData?.length === 0 ? (
+                      <div className="c1i59 c0wh8 c6sts cljpo text-center px-5">
+                        <h3 className="text-red-700 text-center">
+                          <Empty description={false}/>
+                        </h3>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+                        {filteredData?.map((item) => (
                           <div
                             className="bg-white group cursor-pointer border p-3 space-y-4"
                             key={item.id}
@@ -587,9 +587,9 @@ const FilterPage = () => {
                               </div>
                             </div>
                           </div>
-                        ))
-                      )}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
