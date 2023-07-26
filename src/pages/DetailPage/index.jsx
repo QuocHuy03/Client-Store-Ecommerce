@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../../components/libs/Layout";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   fetchProductBySlug,
@@ -443,7 +443,10 @@ const DetailPage = () => {
               ) : filteredProduct?.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {filteredProduct?.map((item) => (
-                    <div className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4">
+                    <div
+                      className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4"
+                      key={item.id}
+                    >
                       <div className="aspect-square rounded-xl bg-gray-100 relative">
                         <img
                           alt="Image"
@@ -452,8 +455,11 @@ const DetailPage = () => {
                           data-nimg="fill"
                           className="aspect-square object-cover rounded-md"
                           sizes="100vw"
-                          srcSet="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=750&q=75 750w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=828&q=75 828w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1080&q=75 1080w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1200&q=75 1200w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=1920&q=75 1920w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=2048&q=75 2048w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=3840&q=75 3840w"
-                          src="/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdckypb6to%2Fimage%2Fupload%2Fv1689069745%2Fcxr9bz07xyjadhkpx8p1.webp&w=3840&q=75"
+                          srcSet={
+                            item.imagePaths
+                              ? item.imagePaths.split(",")[0]
+                              : null
+                          }
                           style={{
                             position: "absolute",
                             height: "100%",
@@ -464,26 +470,10 @@ const DetailPage = () => {
                         />
                         <div className="opacity-0 group-hover:opacity-100 transition w-full px-6 bottom-5 absolute">
                           <div className="flex gap-x-6 justify-center">
-                            <button className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width={20}
-                                height={20}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="text-gray-600"
-                              >
-                                <path d="m21 21-6-6m6 6v-4.8m0 4.8h-4.8" />
-                                <path d="M3 16.2V21m0 0h4.8M3 21l6-6" />
-                                <path d="M21 7.8V3m0 0h-4.8M21 3l-6 6" />
-                                <path d="M3 7.8V3m0 0h4.8M3 3l6 6" />
-                              </svg>
-                            </button>
-                            <button className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition">
+                            <Link
+                              to={`/detail/${item.slugProduct}`}
+                              className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition"
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width={20}
@@ -500,13 +490,20 @@ const DetailPage = () => {
                                 <circle cx={19} cy={21} r={1} />
                                 <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
                               </svg>
-                            </button>
+                            </Link>
                           </div>
                         </div>
                       </div>
                       <div>
-                        <p className="font-semibold text-lg">THOM BROWNE</p>
-                        <p className="text-sm text-gray-500">THOM BROWNE</p>
+                        <p className="font-semibold text-lg">
+                          {item.nameProduct}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <p className=" text-gray-500">{item.nameCategory}</p>
+                          <p className="text-xs font-semibold uppercase text-green-400">
+                            {item.statusProduct}
+                          </p>
+                        </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="text-sm font-semibold text-blue-700">

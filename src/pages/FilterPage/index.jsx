@@ -5,6 +5,7 @@ import { fetchAllProducts } from "../../utils/api/productsApi";
 import { useEffect, useState } from "react";
 import { Empty } from "antd";
 import "./style.css";
+import { Link } from "react-router-dom";
 
 const FilterPage = () => {
   const { data: dataCategories, isLoading: loadingCategories } = useQuery(
@@ -487,7 +488,7 @@ const FilterPage = () => {
                     {filteredData?.length === 0 ? (
                       <div className="c1i59 c0wh8 c6sts cljpo text-center px-5">
                         <h3 className="text-red-700 text-center">
-                          <Empty description={false}/>
+                          <Empty description={false} />
                         </h3>
                       </div>
                     ) : (
@@ -520,26 +521,10 @@ const FilterPage = () => {
                               />
                               <div className="opacity-0 group-hover:opacity-100 transition w-full px-6 bottom-5 absolute">
                                 <div className="flex gap-x-6 justify-center">
-                                  <button className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width={20}
-                                      height={20}
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth={2}
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      className="text-gray-600"
-                                    >
-                                      <path d="m21 21-6-6m6 6v-4.8m0 4.8h-4.8" />
-                                      <path d="M3 16.2V21m0 0h4.8M3 21l6-6" />
-                                      <path d="M21 7.8V3m0 0h-4.8M21 3l-6 6" />
-                                      <path d="M3 7.8V3m0 0h4.8M3 3l6 6" />
-                                    </svg>
-                                  </button>
-                                  <button className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition">
+                                  <Link
+                                    to={`/detail/${item.slugProduct}`}
+                                    className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition"
+                                  >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       width={20}
@@ -556,7 +541,7 @@ const FilterPage = () => {
                                       <circle cx={19} cy={21} r={1} />
                                       <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
                                     </svg>
-                                  </button>
+                                  </Link>
                                 </div>
                               </div>
                             </div>
