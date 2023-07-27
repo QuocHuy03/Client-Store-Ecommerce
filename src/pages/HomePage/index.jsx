@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ModalProduct from "../../components/ModalProduct";
 import Layout from "../../components/libs/Layout";
@@ -9,11 +9,14 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../stores/cartSlice";
 import { message } from "antd";
 import Loading from "../../components/Loading";
+import { useDebounce } from "../../hooks/useDebounce";
+import { searchProductThunk } from "../../reduxThunk/productThunk";
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isOpenModal, setIsOpenModal } = useContext(AppContext);
+
+  const { isOpenModal, setIsOpenModal, search } = useContext(AppContext);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState(null);
   const [showColorError, setShowColorError] = useState(false);
@@ -21,6 +24,12 @@ const HomePage = () => {
 
   const [displayedProductCount, setDisplayedProductCount] = useState(8);
   const [isLoadingProduct, setIsLoading] = useState(false);
+
+  const debouncedValue = useDebounce(search, 3000);
+
+  useEffect(() => {
+    dispatch(searchProductThunk(debouncedValue));
+  }, [debouncedValue]);
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -471,11 +480,7 @@ const HomePage = () => {
               <div className="text-center pt-5">
                 {displayedProductCount < data?.length && (
                   <button className="btn btn-danger" onClick={handleLoadMore}>
-                    {isLoadingProduct ? (
-                        <Loading />
-                    ) : (
-                      "Load More"
-                    )}
+                    {isLoadingProduct ? <Loading /> : "Load More"}
                   </button>
                 )}
               </div>

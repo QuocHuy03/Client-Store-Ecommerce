@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAllCategories } from "../../utils/api/categoriesApi";
 import { useDispatch } from "react-redux";
 import { logout } from "../../stores/authSlice";
+import { searchProductSuccess } from "../../stores/productSlice";
 
 const Header = () => {
   const { user, carts } = useContext(AppContext);
@@ -31,6 +32,10 @@ const Header = () => {
       staleTime: 1000,
     }
   );
+
+  const handleSearch = (event) => {
+    dispatch(searchProductSuccess(event.target.value));
+  };
 
   const handleLogout = async () => {
     sessionStorage.clear();
@@ -76,6 +81,7 @@ const Header = () => {
 
               <div className="relative w-full">
                 <input
+                  onChange={handleSearch}
                   type="search"
                   id="search-dropdown"
                   className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"

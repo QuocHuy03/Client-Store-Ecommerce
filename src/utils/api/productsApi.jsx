@@ -17,11 +17,17 @@ export const fetchAllProductPage = async (page) => {
     const response = await http.get(
       `/getAllProducts?page=${page}&limit=${PAGE_SIZE}`
     );
-    if (response.status === false) {
-      message.error(`${response.message}`);
-    } else {
-      return response;
-    }
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchSearchProduct = async (search) => {
+  try {
+    const response = await http.get(`/getAllProducts?filter=${search}`);
+
+    return response;
   } catch (error) {
     console.error(error);
   }

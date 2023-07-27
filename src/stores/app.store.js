@@ -6,7 +6,8 @@ import thunk from "redux-thunk";
 import authSlice from "./authSlice";
 import cartSlice from "./cartSlice";
 import discountSlice from "./discountSlice";
-import orderSlice from "./orderSlice"
+import orderSlice from "./orderSlice";
+import productSlice from "./productSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -36,14 +37,23 @@ const orderPersistConfig = {
   key: "order",
   storage: storage,
 };
-
 const persistedOrderReducer = persistReducer(orderPersistConfig, orderSlice);
+
+const productPersistConfig = {
+  key: "product",
+  storage: storage,
+};
+const persistedProductReducer = persistReducer(
+  productPersistConfig,
+  productSlice
+);
 
 const rootReducer = combineReducers({
   auth: persistedAuthReducer,
   cart: persistedCartReducer,
   order: persistedOrderReducer,
   discount: persistedDiscountReducer,
+  product: persistedProductReducer,
 });
 
 const middleware = [thunk];
