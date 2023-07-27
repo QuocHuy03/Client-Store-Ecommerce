@@ -112,8 +112,8 @@ export default function RegisterPage() {
           />
         </Form.Item>
         <Form.Item>
-          <Link to={"/register"} className="login-form-forgot">
-            Đã Có Tài Khoản, Register?
+          <Link to={"/login"} className="login-form-forgot">
+            Đã Có Tài Khoản, Login?
           </Link>
         </Form.Item>
         <Form.Item>

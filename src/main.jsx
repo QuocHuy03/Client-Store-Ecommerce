@@ -27,7 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </AppContextProvider>
           </PersistGate>
         </Provider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </BrowserRouter>
   // </React.StrictMode>
