@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Input, Checkbox, Button, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import "./style.css";
 import { clientID } from "../../env";
@@ -10,14 +10,20 @@ import { loginThunk } from "../../reduxThunk/authThunk";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleAuthGoogle = (data) => {
     console.log(data);
     // dispatch(loginSuccess(data));
     message.success("Đăng Nhập Thành Công Với Google");
   };
 
-  const onFinish = (values) => {
-    dispatch(loginThunk(values));
+  const onFinish = async (values) => {
+    const res = await dispatch(loginThunk(values));
+    if (res.role === "USER" || "ADMIN") {
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
   };
   return (
     <div className="login-container-form">

@@ -3,11 +3,13 @@ import { useContext, useRef, useState } from "react";
 import { AppContext } from "../../context/AppContextProvider";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllCategories } from "../../utils/api/categoriesApi";
+import { useDispatch } from "react-redux";
+import { logout } from "../../stores/authSlice";
 
 const Header = () => {
   const { user, carts } = useContext(AppContext);
   const [open, setOpen] = useState(false);
-
+  const dispatch = useDispatch();
   const containerRef = useRef(null);
 
   const handleMouseLeave = () => {
@@ -29,6 +31,12 @@ const Header = () => {
       staleTime: 1000,
     }
   );
+
+  const handleLogout = async () => {
+    sessionStorage.clear();
+    localStorage.clear();
+    dispatch(logout());
+  };
 
   return (
     <div className="border-b">
@@ -135,7 +143,7 @@ const Header = () => {
                 />
                 <span className="font-medium text-sm">
                   {user.fullname} <br />
-                  <Link to={"/logout"} className=" text-gray-400">
+                  <Link onClick={handleLogout} className=" text-gray-400">
                     Đăng xuất
                   </Link>
                 </span>
