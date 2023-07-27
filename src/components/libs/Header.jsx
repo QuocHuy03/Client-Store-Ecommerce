@@ -6,6 +6,7 @@ import { fetchAllCategories } from "../../utils/api/categoriesApi";
 import { useDispatch } from "react-redux";
 import { logout } from "../../stores/authSlice";
 import {searchProductSuccess} from "../../stores/productSlice"
+import { message } from "antd";
 
 const Header = () => {
   const { user, carts } = useContext(AppContext);
@@ -42,6 +43,7 @@ const Header = () => {
     sessionStorage.clear();
     localStorage.clear();
     dispatch(logout());
+    message.info("Đăng Xuất Thành Công ")
   };
 
   return (

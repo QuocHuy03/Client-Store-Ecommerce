@@ -10,3 +10,13 @@ export const postLogin = async (data) => {
     console.error(error);
   }
 };
+
+
+export const postRegister = async (data) => {
+  try {
+    const response = await http.post("/register", data);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
