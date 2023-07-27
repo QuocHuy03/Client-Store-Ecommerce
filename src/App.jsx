@@ -26,7 +26,7 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/c/:slug" element={<FilterPage />} />
           <Route path="/checkout/:uid" element={<CheckoutPage />} />
-          <Route path="/order" element={<OrderPage />} />
+          <Route path="/order-cart" element={<OrderPage />} />
           <Route path="/list-order" element={<ListOrderPage />} />
           <Route path="/detail-order/:code" element={<DetailOrderPage />} />
 
