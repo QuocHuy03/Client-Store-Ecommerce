@@ -10,13 +10,14 @@ export function AppContextProvider({ children }) {
   const { discounts } = useSelector((state) => state.discount);
   const { orders } = useSelector((state) => state.order);
   const { search } = useSelector((state) => state.product);
+
   return (
     <AppContext.Provider
       value={{
         user,
         carts,
-        search,
         orders,
+        search,
         discounts,
         isOpenModal,
         setIsOpenModal,

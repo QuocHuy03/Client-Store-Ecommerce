@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { searchProductThunk } from "../../reduxThunk/productThunk";
 
 const initialState = {
-  search: null,
+  search: "",
   error: null,
 };
 
@@ -18,17 +17,6 @@ const productSlide = createSlice({
       state.search = null;
       state.error = action.payload.message;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(searchProductThunk.fulfilled, (state, action) => {
-        state.search = action.payload;
-        state.error = null;
-      })
-      .addCase(searchProductThunk.rejected, (state, action) => {
-        state.search = null;
-        state.error = action.error.message;
-      });
   },
 });
 

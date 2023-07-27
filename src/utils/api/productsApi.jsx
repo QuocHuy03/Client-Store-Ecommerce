@@ -3,9 +3,14 @@ import Http from "../http";
 
 const http = new Http();
 
-export const fetchAllProducts = async () => {
+export const fetchAllProducts = async (search) => {
   try {
-    const response = await http.get(`/getAllProducts`);
+    let response;
+    if (search) {
+      response = await http.get(`/getAllProducts?filter=${search}`);
+    } else {
+      response = await http.get(`/getAllProducts`);
+    }
     return response;
   } catch (error) {
     console.error(error);
@@ -17,16 +22,6 @@ export const fetchAllProductPage = async (page) => {
     const response = await http.get(
       `/getAllProducts?page=${page}&limit=${PAGE_SIZE}`
     );
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const fetchSearchProduct = async (search) => {
-  try {
-    const response = await http.get(`/getAllProducts?filter=${search}`);
-
     return response;
   } catch (error) {
     console.error(error);

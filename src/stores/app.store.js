@@ -39,21 +39,13 @@ const orderPersistConfig = {
 };
 const persistedOrderReducer = persistReducer(orderPersistConfig, orderSlice);
 
-const productPersistConfig = {
-  key: "product",
-  storage: storage,
-};
-const persistedProductReducer = persistReducer(
-  productPersistConfig,
-  productSlice
-);
 
 const rootReducer = combineReducers({
   auth: persistedAuthReducer,
   cart: persistedCartReducer,
   order: persistedOrderReducer,
   discount: persistedDiscountReducer,
-  product: persistedProductReducer,
+  product: productSlice,
 });
 
 const middleware = [thunk];

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ModalProduct from "../../components/ModalProduct";
 import Layout from "../../components/libs/Layout";
@@ -10,7 +10,6 @@ import { addToCart } from "../../stores/cartSlice";
 import { message } from "antd";
 import Loading from "../../components/Loading";
 import { useDebounce } from "../../hooks/useDebounce";
-import { searchProductThunk } from "../../reduxThunk/productThunk";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -24,12 +23,30 @@ const HomePage = () => {
 
   const [displayedProductCount, setDisplayedProductCount] = useState(8);
   const [isLoadingProduct, setIsLoading] = useState(false);
+  const [searchData, setSearchData] = useState([]);
+
+  const fetchProductAll = async (search) => {
+    const res = await fetchAllProducts(search);
+    setSearchData(res);
+    return res;
+  };
+
+  const { data, isLoading } = useQuery(["products"], () => fetchProductAll(), {
+    retry: 3,
+    retryDelay: 1000,
+  });
 
   const debouncedValue = useDebounce(search, 3000);
+  const refSearch = useRef();
 
   useEffect(() => {
-    dispatch(searchProductThunk(debouncedValue));
-  }, [debouncedValue]);
+    if (refSearch.current) {
+      if (debouncedValue !== null && debouncedValue !== undefined) {
+        fetchProductAll(debouncedValue);
+      }
+    }
+    refSearch.current = true;
+  }, [debouncedValue, dispatch]);
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -38,10 +55,6 @@ const HomePage = () => {
   const closeModal = () => {
     setIsOpenModal(false);
   };
-
-  const { data, isLoading } = useQuery(["products"], () => fetchAllProducts(), {
-    staleTime: 1000,
-  });
 
   const handleImageClick = (index) => {
     setSelectedImageIndex(index);
@@ -142,7 +155,7 @@ const HomePage = () => {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {/* products */}
-                  {data.slice(0, displayedProductCount)?.map((item) => (
+                  {searchData?.slice(0, displayedProductCount)?.map((item) => (
                     <React.Fragment key={item.id}>
                       <div className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4">
                         <div className="aspect-square rounded-xl bg-gray-100 relative">

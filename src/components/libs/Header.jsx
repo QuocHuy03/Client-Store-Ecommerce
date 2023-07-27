@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAllCategories } from "../../utils/api/categoriesApi";
 import { useDispatch } from "react-redux";
 import { logout } from "../../stores/authSlice";
-import { searchProductSuccess } from "../../stores/productSlice";
+import {searchProductSuccess} from "../../stores/productSlice"
 
 const Header = () => {
   const { user, carts } = useContext(AppContext);
@@ -32,6 +32,7 @@ const Header = () => {
       staleTime: 1000,
     }
   );
+
 
   const handleSearch = (event) => {
     dispatch(searchProductSuccess(event.target.value));
