@@ -164,11 +164,10 @@ const HomePage = () => {
                             loading="lazy"
                             decoding="async"
                             data-nimg="fill"
-                            className="aspect-square object-cover rounded-md"
+                            className="aspect-square rounded-md"
                             style={{
                               position: "absolute",
-                              height: "100%",
-                              width: "100%",
+          
                               left: 0,
                               top: 0,
                               right: 0,
@@ -184,7 +183,7 @@ const HomePage = () => {
                           />
                           <div className="opacity-0 group-hover:opacity-100 transition w-full px-6 bottom-5 absolute">
                             <div className="flex gap-x-6 justify-center">
-                              <button
+                              {/* <button
                                 onClick={openModal}
                                 className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition"
                               >
@@ -205,7 +204,7 @@ const HomePage = () => {
                                   <path d="M21 7.8V3m0 0h-4.8M21 3l-6 6" />
                                   <path d="M3 7.8V3m0 0h4.8M3 3l6 6" />
                                 </svg>
-                              </button>
+                              </button> */}
                               <Link
                                 to={`/detail/${item.slugProduct}`}
                                 className="rounded-full flex items-center justify-center bg-white border shadow-md p-2 hover:scale-110 transition"
@@ -257,7 +256,7 @@ const HomePage = () => {
                           </div>
                         </div>
                       </div>
-                      <ModalProduct
+                      {/* <ModalProduct
                         isOpenModal={isOpenModal}
                         title={"Detail Product"}
                         closeModal={closeModal}
@@ -484,7 +483,7 @@ const HomePage = () => {
                             </div>
                           </div>
                         </div>
-                      </ModalProduct>
+                      </ModalProduct> */}
                     </React.Fragment>
                   ))}
                   {/* end products */}
