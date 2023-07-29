@@ -520,7 +520,7 @@ const FilterPage = () => {
                                 loading="lazy"
                                 decoding="async"
                                 data-nimg="fill"
-                                className="aspect-square object-cover rounded-md"
+                                className="aspect-square rounded-md"
                                 sizes="100vw"
                                 srcSet={
                                   item.imagePaths
@@ -529,8 +529,6 @@ const FilterPage = () => {
                                 }
                                 style={{
                                   position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
                                   inset: 0,
                                   color: "transparent",
                                 }}
