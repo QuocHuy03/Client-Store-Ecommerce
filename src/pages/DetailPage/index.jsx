@@ -155,13 +155,12 @@ const DetailPage = () => {
                                       loading="lazy"
                                       decoding="async"
                                       data-nimg="fill"
-                                      className="object-cover object-center"
+                                      className="object-center"
                                       sizes="100vw"
                                       srcSet={imagePath}
                                       style={{
                                         position: "absolute",
-                                        height: "100%",
-                                        width: "100%",
+                         
                                         inset: 0,
                                         color: "transparent",
                                       }}
@@ -194,8 +193,7 @@ const DetailPage = () => {
                               loading="lazy"
                               decoding="async"
                               data-nimg="fill"
-                              className="object-cover object-center"
-                              sizes="100vw"
+                              className="object-center"
                               srcSet={
                                 product.imagePaths
                                   ? product.imagePaths.split(",")[
@@ -205,8 +203,6 @@ const DetailPage = () => {
                               }
                               style={{
                                 position: "absolute",
-                                height: "100%",
-                                width: "100%",
                                 inset: 0,
                                 color: "transparent",
                               }}
@@ -453,7 +449,7 @@ const DetailPage = () => {
                           loading="lazy"
                           decoding="async"
                           data-nimg="fill"
-                          className="aspect-square object-cover rounded-md"
+                          className="aspect-square rounded-md"
                           sizes="100vw"
                           srcSet={
                             item.imagePaths
@@ -462,8 +458,6 @@ const DetailPage = () => {
                           }
                           style={{
                             position: "absolute",
-                            height: "100%",
-                            width: "100%",
                             inset: 0,
                             color: "transparent",
                           }}

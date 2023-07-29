@@ -7,4 +7,4 @@ export const discount_code = {
   price: 500000,
 };
 
-export const PAGE_SIZE = 4;
+export const PAGE_SIZE = 8;

@@ -14,7 +14,7 @@ export default function ModalProduct({
   };
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center p-4 overflow-y-auto"
+      className="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center p-4 overflow-y-auto"
       style={{ zIndex: 100 }}
     >
       <div className={`relative w-full max-w-3xl max-h-full overflow-y-auto`}>
