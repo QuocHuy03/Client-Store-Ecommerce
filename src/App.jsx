@@ -13,6 +13,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import OrderPage from "./pages/OrderPage";
 import ListOrderPage from "./pages/ListOrderPage";
 import DetailOrderPage from "./pages/DetailOrderPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -29,8 +30,7 @@ function App() {
           <Route path="/order-cart" element={<OrderPage />} />
           <Route path="/list-order" element={<ListOrderPage />} />
           <Route path="/detail-order/:code" element={<DetailOrderPage />} />
-
-          {/* <Route path="*" element={<NotFound />} /> */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </GoogleOAuthProvider>
     </>
