@@ -22,7 +22,7 @@ export const orderThunk = createAsyncThunk(
           throw new Error("VNPAY URL is missing or invalid.");
         }
       } else if (data.methodPayment === 2) {
-        const receive = `/order?paymentMethod=receive`;
+        const receive = `/order-cart?paymentMethod=receive`;
         return receive;
       } else {
         message.error("Vui lòng chọn phương thức thanh toán nhé");
