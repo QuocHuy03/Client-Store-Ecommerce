@@ -15,7 +15,6 @@ export default function DetailOrderPage() {
       enabled: !!code,
     }
   );
-  console.log(data)
 
   // table
 

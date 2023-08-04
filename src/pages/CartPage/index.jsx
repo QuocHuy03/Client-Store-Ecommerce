@@ -69,15 +69,13 @@ const CartPage = () => {
                             loading="lazy"
                             decoding="async"
                             data-nimg="fill"
-                            className="object-cover object-center"
+                            className="object-center"
                             sizes="100vw"
                             srcSet={
                               item.image ? item.image.split(",")[0] : null
                             }
                             style={{
                               position: "absolute",
-                              height: "100%",
-                              width: "100%",
                               inset: 0,
                               color: "transparent",
                             }}
