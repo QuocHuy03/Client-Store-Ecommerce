@@ -3,7 +3,6 @@ import { Form, Input, Checkbox, Button, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
 import "./style.css";
 import { clientID } from "../../env";
 import { loginThunk } from "../../reduxThunk/authThunk";
@@ -11,11 +10,6 @@ import { loginThunk } from "../../reduxThunk/authThunk";
 export default function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleAuthGoogle = (data) => {
-    console.log(data);
-    // dispatch(loginSuccess(data));
-    message.success("Đăng Nhập Thành Công Với Google");
-  };
 
   const onFinish = async (values) => {
     const res = await dispatch(loginThunk(values));
@@ -86,14 +80,7 @@ export default function LoginPage() {
             Log in
           </Button>
         </Form.Item>
-        <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            console.log(credentialResponse);
-          }}
-          onError={() => {
-            console.log("Login Failed");
-          }}
-        />
+        
       </Form>
     </div>
   );
